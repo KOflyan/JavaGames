@@ -19,7 +19,7 @@ import java.io.PrintWriter;
 /**
  * Game Settings screen.
  */
-public class SettingsPane extends GridPane {
+class SettingsPane extends GridPane {
 
     private CheckBox musicOnOff = new CheckBox("Music on/off");
     private Button back = new Button("Back");
@@ -144,5 +144,13 @@ public class SettingsPane extends GridPane {
      */
     void setDefault() {
         colorLabel.setText("Choose the color!");
+    }
+
+    /**
+     * Resolving music checkbox.
+     * @return checkbox.
+     */
+    CheckBox getMusicBox() {
+        return musicOnOff;
     }
 }
