@@ -25,7 +25,7 @@ class ScoresPane extends GridPane {
         setPrefSize(width, height);
         setAlignment(Pos.BOTTOM_LEFT);
         setPadding(new Insets(50));
-        back.setPrefSize(100, 25);
+        back.setPrefSize(130, 40);
         getChildren().add(back);
     }
 

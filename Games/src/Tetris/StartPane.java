@@ -13,7 +13,7 @@ class StartPane extends GridPane {
     private Button start = new Button("Start");
     private Button exit = new Button("Exit");
     private Button scores = new Button("Scores");
-
+    private Button settings = new Button("Settings");
 
     /**
      * Class constructor.
@@ -26,15 +26,17 @@ class StartPane extends GridPane {
         BackgroundImage back = new BackgroundImage(new Image(getClass().getResourceAsStream("img/love.jpg"),
                 width, height,false,true), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
                 BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-        setVgap(25);
+        setVgap(15);
         setPadding(new Insets(70, 40, 70, 40));
         setBackground(new Background(back));
         start.setPrefSize(130, 40);
         scores.setPrefSize(130, 40);
         exit.setPrefSize(130, 40);
+        settings.setPrefSize(130, 40);
         add(start, 1, 3);
         add(scores, 1, 4);
-        add(exit, 1, 5);
+        add(settings,1,5);
+        add(exit, 1, 6);
     }
 
     /**
@@ -60,4 +62,13 @@ class StartPane extends GridPane {
     Button getScores() {
         return scores;
     }
+
+    /**
+     * Resolve settings screen button.
+     * @return settings.
+     */
+    Button getSettings() {
+        return settings;
+    }
 }
+

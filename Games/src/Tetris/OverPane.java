@@ -28,13 +28,13 @@ class OverPane extends StackPane {
         int height = new Main().getHeight();
         setPrefSize(width, height);
         setAlignment(Pos.BOTTOM_CENTER);
-        setPadding(new Insets(130));
+        //setPadding(new Insets(50));
         startOver.setPrefSize(130, 30);
         exit.setPrefSize(130, 30);
-        startOver.setTranslateX(-160);
-        exit.setTranslateX(160);
-        startOver.setTranslateY(-100);
-        exit.setTranslateY(-100);
+        startOver.setTranslateX(-220);
+        exit.setTranslateX(220);
+        startOver.setTranslateY(-130);
+        exit.setTranslateY(-130);
 
         BackgroundImage back = new BackgroundImage(new Image(getClass().getResourceAsStream("img/love.jpg"),
                 width, height,false,true), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
@@ -42,8 +42,8 @@ class OverPane extends StackPane {
         setBackground(new Background(back));
         label.setTextFill(Color.WHITE);
         label2.setTextFill(Color.WHITE);
-        label2.setTranslateY(-500);
-        label.setTranslateY(-550);
+        label2.setTranslateY(-600);
+        label.setTranslateY(-650);
         label.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 25));
         label2.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 25));
         getChildren().addAll(startOver, exit, label, label2);
