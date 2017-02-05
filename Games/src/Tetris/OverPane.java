@@ -35,7 +35,6 @@ class OverPane extends StackPane {
         exit.setTranslateX(220);
         startOver.setTranslateY(-130);
         exit.setTranslateY(-130);
-
         BackgroundImage back = new BackgroundImage(new Image(getClass().getResourceAsStream("img/love.jpg"),
                 width, height,false,true), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
                 BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);

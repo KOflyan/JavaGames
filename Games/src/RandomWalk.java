@@ -18,6 +18,7 @@ import java.util.Random;
 import static java.util.Arrays.asList;
 
 public class RandomWalk extends Application {
+
     private final int STEP = 40;
     private final int W = 750;
     private final int H = 780;
@@ -96,6 +97,14 @@ public class RandomWalk extends Application {
             game();
         });
     }
+
+    /**
+     * Draw smth.
+     * @param x1 x1
+     * @param y1 y1
+     * @param x2 x2
+     * @param y2 y2
+     */
     private void drawThings(double x1, double y1, double x2, double y2){
         pane.getChildren().add(new Circle(x1, y1, rad));
         pane.getChildren().add(new Line(x1, y1, x2, y2));
