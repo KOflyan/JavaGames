@@ -92,7 +92,6 @@ public class Main extends Application {
             mediaPlayer.play();
             mediaPlayer.setCycleCount(INDEFINITE);
         }
-
         // Show
         mediaPlayer.setVolume(30);
         primaryStage.show();
