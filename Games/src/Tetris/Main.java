@@ -4,7 +4,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
@@ -21,7 +20,6 @@ public class Main extends Application {
 
     private final int width = 800;
     private final int height = 800;
-    private Pane pane;
     private Timeline timeline;
     private boolean run = false;
     private String mediaPath = "Games/src/Tetris/music/Troika.mp3";
@@ -96,6 +94,7 @@ public class Main extends Application {
         }
 
         // Show
+        mediaPlayer.setVolume(30);
         primaryStage.show();
     }
 
@@ -122,15 +121,16 @@ public class Main extends Application {
     private void game(Stage stage) {
 
         GamePane gamePane = new GamePane();
-        stage.setScene(new Scene(gamePane));
 
-        gamePane.drawShapes(2);
+        gamePane.drawShapes(rand.nextInt(4));
 
-        timeline = new Timeline(new KeyFrame(Duration.seconds(0.1), event -> gamePane.increaseSpeed()));
+        timeline = new Timeline(new KeyFrame(Duration.seconds(0.05), event -> gamePane.controls()));
 
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
 
+        stage.setScene(new Scene(gamePane));
+        gamePane.requestFocus();
     }
 
     /**

@@ -1,7 +1,10 @@
 package Tetris;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -18,20 +21,24 @@ import java.util.Scanner;
 /**
  * Game Main screen.
  */
-class GamePane extends GridPane{
+class GamePane extends GridPane {
     private int width = new Main().getWidth();
     private int height = new Main().getHeight();
     private Color[] colors = {Color.BLUE, Color.DARKGREY, Color.DARKGREEN, Color.AQUAMARINE, Color.VIOLET};
     private final int BLOCK_SIZE = 25;
-    private double dx = 3;
-    private double dy = 4;
-    private double x = width / 2 - BLOCK_SIZE;
+    private double dx = 5;
+    private double dy = 2;
+    private final int SPEED = 2;
+    private double x = 400 - BLOCK_SIZE;
     private double y = -400;
     private Random rand = new Random();
     private Rectangle rect = new Rectangle();
     private Group line = new Group();
     private Group Tshaped = new Group();
     private Group HookShaped = new Group();
+    private String current;
+    private String position = "up1";
+    private boolean start = true;
 
     /**
      * Class constructor.
@@ -69,6 +76,7 @@ class GamePane extends GridPane{
 
     /**
      * Read color from file and apply changes.
+     *
      * @return color.
      */
     private Color readFromFile() {
@@ -108,6 +116,7 @@ class GamePane extends GridPane{
 
     /**
      * Draw random shape.
+     *
      * @param shapeNumber random number.
      */
     void drawShapes(int shapeNumber) {
@@ -116,10 +125,10 @@ class GamePane extends GridPane{
                 drawCube();
                 break;
             case 1:
-                drawLine();
+                drawLine(true);
                 break;
             case 2:
-                drawTShaped();
+                drawTShaped(true);
                 break;
             case 3:
                 drawHookShaped();
@@ -158,43 +167,18 @@ class GamePane extends GridPane{
         first.setEndY(y + BLOCK_SIZE);
         */
         getChildren().add(rect);
-        }
-
-    /**
-     * Draw a line.
-     */
-    private void drawLine() {
-        int block = 0;
-        for (int i = 0; i < 4; i++) {
-            Rectangle rect = new Rectangle();
-            rect.setWidth(BLOCK_SIZE);
-            rect.setHeight(BLOCK_SIZE);
-            rect.setTranslateX(x);
-            rect.setTranslateY(y + block);
-            rect.setFill(colors[1]);
-            line.getChildren().add(rect);
-            block += BLOCK_SIZE;
-        }
-        line.setTranslateX(x);
-        line.setTranslateY(y);
-        getChildren().add(line);
-
+        current = "cube";
     }
 
     /**
      * Draw T-shaped object.
      */
-    private void drawTShaped() {
-        int block = 0;
-        for (int i = 0; i < 3; i++) {
-            Rectangle rect = new Rectangle();
-            rect.setWidth(BLOCK_SIZE);
-            rect.setHeight(BLOCK_SIZE);
-            rect.setTranslateX(x);
-            rect.setTranslateY(y + block);
-            rect.setFill(colors[2]);
-            Tshaped.getChildren().add(rect);
-            block += BLOCK_SIZE;
+    private Group drawTShaped(boolean up) {
+        Group group = drawConstructLine(up, 3, colors[2]);
+        int step;
+        if (up) {
+            position = "up";
+            step = BLOCK_SIZE;
         }
         Rectangle rect2 = new Rectangle();
         rect2.setWidth(BLOCK_SIZE);
@@ -202,41 +186,237 @@ class GamePane extends GridPane{
         rect2.setTranslateX(x + BLOCK_SIZE);
         rect2.setTranslateY(y + BLOCK_SIZE);
         rect2.setFill(colors[2]);
-        Tshaped.getChildren().add(rect2);
-        getChildren().add(Tshaped);
+        group.getChildren().add(rect2);
+        group.setTranslateX(x);
+        group.setTranslateY(y);
+        if (start) {
+            Tshaped = group;
+            getChildren().add(Tshaped);
+        }
+        current = "tshaped";
+        return group;
     }
 
     /**
-     * Draw Hook-shaped object.
+     * Basic line for further usage.
+     * @param down is line to be vertically or horizontally oriented.
+     * @param count how many blocks it consists of.
+     * @param color color.
+     * @return group.
      */
-    private void drawHookShaped() {
-        int block = 0;
-        for (int i = 0; i < 3; i++) {
+    private Group drawConstructLine(boolean down, int count, Color color) {
+        int hBlock = 0;
+        int vBlock = 0;
+        int vStep;
+        int hStep;
+        if (down) {
+            vStep = BLOCK_SIZE;
+            hStep = 0;
+        } else {
+            vStep = 0;
+            hStep = BLOCK_SIZE;
+        }
+        Group group = new Group();
+        for (int i = 0; i < count; i++) {
             Rectangle rect = new Rectangle();
             rect.setWidth(BLOCK_SIZE);
             rect.setHeight(BLOCK_SIZE);
-            rect.setTranslateX(x);
-            rect.setTranslateY(y + block);
-            rect.setFill(colors[2]);
-            HookShaped.getChildren().add(rect);
-            block += BLOCK_SIZE;
+            rect.setTranslateX(x + hBlock);
+            rect.setTranslateY(y + vBlock);
+            rect.setFill(color);
+            group.getChildren().add(rect);
+            hBlock += hStep;
+            vBlock += vStep;
         }
+        return group;
+    }
+
+    /**
+     * Draw a line shape.
+     */
+    private Group drawLine(boolean up) {
+        Group group = drawConstructLine(up, 4, colors[1]);
+
+        group.setTranslateX(x);
+        group.setTranslateY(y);
+        current = "line";
+        if (start) {
+            line = group;
+            getChildren().add(line);
+        }
+        if (up) {
+            position = "up";
+        } else {
+            position = "down";
+        }
+        return group;
+    }
+
+    /**
+     * Draw Hook-shaped object. Up position 1.
+     */
+    private Group drawHookShaped() {
+        Group group = drawConstructLine(true, 3, colors[3]);
         Rectangle rect2 = new Rectangle();
         rect2.setWidth(BLOCK_SIZE);
         rect2.setHeight(BLOCK_SIZE);
         rect2.setTranslateX(x + BLOCK_SIZE);
         rect2.setTranslateY(y + BLOCK_SIZE * 2);
         rect2.setFill(colors[3]);
-        HookShaped.getChildren().add(rect2);
-        getChildren().add(HookShaped);
+        group.getChildren().add(rect2);
+        group.setTranslateX(x);
+        group.setTranslateY(y);
+        current = "hook";
+        position = "up1";
+        if (start) {
+            HookShaped = group;
+            getChildren().add(HookShaped);
+        }
+        return group;
     }
 
     /**
-     * Increase speed.
+     * Down position 1.
+     * @return group.
      */
-    void increaseSpeed() {
-        //x += dx;
+    private Group drawHookShapedDown() {
+        Group group = drawConstructLine(false, 3, colors[3]);
+        Rectangle rect2 = new Rectangle();
+        rect2.setWidth(BLOCK_SIZE);
+        rect2.setHeight(BLOCK_SIZE);
+        rect2.setTranslateX(x + BLOCK_SIZE * 2);
+        rect2.setTranslateY(y - BLOCK_SIZE);
+        rect2.setFill(colors[3]);
+        group.getChildren().add(rect2);
+        position = "down2";
+        return group;
+    }
+
+    /**
+     * Up position 2.
+     * @return group.
+     */
+    private Group drawHookShapedUP() {
+        Group group = drawConstructLine(true, 3, colors[3]);
+        Rectangle rect2 = new Rectangle();
+        rect2.setWidth(BLOCK_SIZE);
+        rect2.setHeight(BLOCK_SIZE);
+        rect2.setTranslateX(x - BLOCK_SIZE);
+        rect2.setTranslateY(y);
+        rect2.setFill(colors[3]);
+        group.getChildren().add(rect2);
+        position = "up2";
+        return group;
+    }
+
+    /**
+     * Down position 2.
+     * @return group.
+     */
+    private Group drawHookShapedDown2() {
+        Group group = drawConstructLine(false, 3, colors[3]);
+        Rectangle rect2 = new Rectangle();
+        rect2.setWidth(BLOCK_SIZE);
+        rect2.setHeight(BLOCK_SIZE);
+        rect2.setTranslateX(x);
+        rect2.setTranslateY(y + BLOCK_SIZE);
+        rect2.setFill(colors[3]);
+        group.getChildren().add(rect2);
+        position = "down1";
+        return group;
+    }
+
+    /**
+     * Select difficulty.
+     *
+     * @param difficulty integer.
+     */
+    void difficultySelect(int difficulty) {
+        switch (difficulty) {
+            case 0:
+                dy = 3;
+                break;
+            case 1:
+                dy = 5;
+                break;
+            case 2:
+                dy = 7;
+                break;
+        }
+    }
+
+    /**
+     * Game heart.
+     */
+    void controls() {
+        start = false;
         y += dy;
+        /*
+        switch (current){
+            case "cube":
+                if (x <= 200 + BLOCK_SIZE || x >= 600 - BLOCK_SIZE) {
+                    dx = 0;
+                } else {
+                    dx = 5;
+                }
+                break;
+        }
+        */
+        setOnKeyPressed(ev -> {
+            if (ev.getCode() == KeyCode.DOWN) {
+                if (dy <= 8) {
+                    dy += 2;
+                }
+            }
+            if (ev.getCode() == KeyCode.RIGHT) {
+                if (dx == 0) x -= 5;
+                x += dx;
+            }
+            else if (ev.getCode() == KeyCode.LEFT) {
+                if (dx == 0) x += 5;
+                x -= dx;
+            }
+            if (current.equals("hook") && ev.getCode() == KeyCode.UP) {
+                Group toGo = new Group();
+                switch (position) {
+                    case "up1":
+                        toGo = drawHookShapedDown2();
+                        break;
+                    case "down1":
+                        toGo = drawHookShapedUP();
+                        break;
+                    case "up2":
+                        toGo = drawHookShapedDown();
+                        break;
+                    case "down2":
+                        toGo = drawHookShaped();
+                        break;
+                }
+                getChildren().remove(HookShaped);
+                HookShaped.getChildren().clear();
+                HookShaped.getChildren().add(toGo);
+                getChildren().add(HookShaped);
+            } else if (current.equals("line") && ev.getCode() == KeyCode.UP) {
+                Group toGo = new Group();
+                switch (position) {
+                    case "up":
+                        toGo = drawLine(false);
+                        break;
+                    case "down":
+                        toGo = drawLine(true);
+                        break;
+                }
+                getChildren().remove(line);
+                line.getChildren().clear();
+                line.getChildren().add(toGo);
+                getChildren().add(line);
+            }
+        });
+        setOnKeyReleased(ev -> {
+            if (ev.getCode() == KeyCode.DOWN) {
+                dy = SPEED;
+            }
+        });
         rect.setTranslateX(x);
         rect.setTranslateY(y);
         line.setTranslateX(x);
@@ -245,20 +425,5 @@ class GamePane extends GridPane{
         HookShaped.setTranslateY(y);
         Tshaped.setTranslateX(x);
         Tshaped.setTranslateY(y);
-    }
-
-    /**
-     * Select difficulty.
-     * @param difficulty integer.
-     */
-    void difficultySelect(int difficulty) {
-        switch (difficulty) {
-            case 0: dy = 3;
-                break;
-            case 1: dy = 5;
-                break;
-            case 2: dy = 7;
-                break;
-        }
     }
 }
