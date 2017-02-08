@@ -15,16 +15,30 @@ import java.util.Random;
 
 import static javafx.scene.media.AudioClip.INDEFINITE;
 
-
+/**
+ * Main.
+ */
 public class Main extends Application {
 
+    /**
+     * Screen width.
+     */
     private final int width = 800;
+
+    /**
+     * Screen height.
+     */
     private final int height = 800;
+
     private Timeline timeline;
     private boolean run = false;
     private String mediaPath = "Games/src/Tetris/music/Troika.mp3";
     private Random rand = new Random();
 
+    /**
+     * Main mehod.
+     * @param primaryStage Stage.
+     */
     @Override
     public void start(Stage primaryStage) {
         // Media
@@ -46,9 +60,6 @@ public class Main extends Application {
         startPane.getExit().setOnMouseClicked(ev -> System.exit(1));
         startPane.getScores().setOnMouseClicked(ev -> primaryStage.setScene(scoresScene));
         startPane.getStart().setOnMouseClicked(ev -> {
-            //GamePane gamePane = new GamePane();
-            //Scene gameScene = new Scene(gamePane);
-            //primaryStage.setScene(gameScene);
             game(primaryStage);
 
         });
@@ -118,16 +129,11 @@ public class Main extends Application {
      * @param stage primaryStage.
      */
     private void game(Stage stage) {
-
         GamePane gamePane = new GamePane();
-
         gamePane.drawShapes(rand.nextInt(4));
-
         timeline = new Timeline(new KeyFrame(Duration.seconds(0.05), event -> gamePane.controls()));
-
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
-
         stage.setScene(new Scene(gamePane));
         gamePane.requestFocus();
     }
