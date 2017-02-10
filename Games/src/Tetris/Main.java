@@ -130,7 +130,7 @@ public class Main extends Application {
      */
     private void game(Stage stage) {
         GamePane gamePane = new GamePane();
-        gamePane.drawShapes(rand.nextInt(4));
+        gamePane.drawShapes(4);
         timeline = new Timeline(new KeyFrame(Duration.seconds(0.05), event -> gamePane.controls()));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();

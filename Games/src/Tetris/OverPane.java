@@ -1,6 +1,5 @@
 package Tetris;
 
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -15,6 +14,7 @@ import javafx.scene.text.FontWeight;
  * Game Over screen.
  */
 class OverPane extends StackPane {
+
     private Button startOver = new Button("Go to Menu");
     private Button exit = new Button("Exit");
 
