@@ -157,7 +157,7 @@ public class RandomWalk extends Application {
 
                 if (index + 1 == points.size()) {
                     timeline.stop();
-                    pane.getChildren().add(over);
+                    startAgain();
                 }
                 if (pointsVisited.contains(new ArrayList<>(asList(x1 + STEP, y1))) &&
                         pointsVisited.contains(new ArrayList<>(asList(x1 - STEP, y1))) &&
@@ -165,7 +165,7 @@ public class RandomWalk extends Application {
                         pointsVisited.contains(new ArrayList<>(asList(x1, y1 + STEP)))
                         ) {
                     timeline.stop();
-                    pane.getChildren().add(over);
+                    startAgain();
                 }
                 if (!(x2 < STEP || x2 > 680 || y2 < STEP || y2 > 680) && !pointsVisited.contains(p)) {
 
@@ -181,14 +181,24 @@ public class RandomWalk extends Application {
                 }
                 if (check.size() == 4) {
                     timeline.stop();
+                    startAgain();
 
-                    pane.getChildren().add(over);
                 }
             }
         });
         timeline.getKeyFrames().add(frame);
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
+    }
+    private void startAgain() {
+
+        pane.getChildren().clear();
+        pointsVisited.clear();
+        check.clear();
+        drawWeb();
+        gameStart();
+        pane.getChildren().add(start);
+        index = 0;
     }
 
     public static void main(String[] args){
