@@ -35,7 +35,7 @@ public class MovingObjects extends Application {
         primaryStage.setScene(new Scene(pane, width, height));
         primaryStage.show();
     }
-    void increaseSpeed() {
+    private void increaseSpeed() {
         y += dy;
         rect.setTranslateX(x);
         rect.setTranslateY(y);

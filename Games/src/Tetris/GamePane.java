@@ -20,7 +20,7 @@ import java.util.Scanner;
  * Game Main screen.
  */
 class GamePane extends GridPane {
-    private final int SPEED = 3;
+    private final double SPEED = 1;
     private final int SPEEDX = 10;
     private final int BLOCK_SIZE = 30;
     private final int width = new Main().getWidth();
@@ -29,10 +29,9 @@ class GamePane extends GridPane {
     private Color[] colors = {Color.BLUE, Color.DARKGREY, Color.DARKGREEN, Color.AQUAMARINE, Color.ORANGE};
     private double dx = SPEEDX;
     private double dy = SPEED;
-    private double x = 400 - BLOCK_SIZE;
-    private double y = -400;
-    //private Random rand = new Random();
-    private Rectangle cube = new Rectangle();
+    private double x = width / 2 - BLOCK_SIZE;
+    private double y = -height / 2;
+    private Group cube = new Group();
     private Group line = new Group();
     private Group Tshaped = new Group();
     private Group HookShaped = new Group();
@@ -41,6 +40,7 @@ class GamePane extends GridPane {
     private String current;
     private String position;
     private boolean start = true;
+    private Random rand = new Random();
 
     /**
      * Class constructor.
@@ -128,17 +128,17 @@ class GamePane extends GridPane {
                 drawLine(true);
                 break;
             case 2:
-                position = "upRight";
-                current = "tshaped";
+                position = "right";
+                current = "t";
                 drawTShaped();
                 break;
             case 3:
-                position = "downLeft";
+                position = "up";
                 current = "hook";
                 drawHookShaped();
                 break;
             case 4:
-                position = "downLeft";
+                position = "up";
                 current = "hook2";
                 drawHookShaped2();
                 break;
@@ -148,13 +148,20 @@ class GamePane extends GridPane {
     /**
      * Draw a cube.
      */
-    private void drawCube() {
-        cube.setHeight(BLOCK_SIZE * 2);
-        cube.setWidth(BLOCK_SIZE * 2);
-        cube.setFill(colors[0]);
-        cube.setTranslateX(x);
-        cube.setTranslateY(y);
-        getChildren().add(cube);
+    private Group drawCube() {
+        Group group = new Group();
+        Rectangle rect = new Rectangle();
+        rect.setHeight(BLOCK_SIZE * 2);
+        rect.setWidth(BLOCK_SIZE * 2);
+        rect.setFill(colors[0]);
+        rect.setTranslateX(x);
+        rect.setTranslateY(y);
+        group.getChildren().add(rect);
+        if (start) {
+            cube = group;
+            getChildren().add(group);
+        }
+        return group;
     }
 
     /**
@@ -164,14 +171,14 @@ class GamePane extends GridPane {
         Group group = drawConstructLine(true, 3, colors[2]);
         double translateX;
         double translateY;
-        if (position.equals("downDown")) {
+        if (position.equals("down")) {
             translateX = x - BLOCK_SIZE;
             translateY = y + BLOCK_SIZE;
-            position = "upLeft";
+            position = "left";
         } else {
             translateX = x + BLOCK_SIZE;
             translateY = y + BLOCK_SIZE;
-            position = "upRight";
+            position = "right";
         }
         Rectangle rect2 = new Rectangle();
         rect2.setWidth(BLOCK_SIZE);
@@ -193,14 +200,14 @@ class GamePane extends GridPane {
         Group group = drawConstructLine(false, 3, colors[2]);
         double translateX;
         double translateY;
-        if (position.equals("upRight")) {
+        if (position.equals("right")) {
             translateX = x + BLOCK_SIZE;
             translateY = y + BLOCK_SIZE;
-            position = "downDown";
+            position = "down";
         } else {
             translateX = x + BLOCK_SIZE;
             translateY = y - BLOCK_SIZE;
-            position = "downUp";
+            position = "up";
         }
         Rectangle rect2 = new Rectangle();
         rect2.setWidth(BLOCK_SIZE);
@@ -253,7 +260,6 @@ class GamePane extends GridPane {
      */
     private Group drawLine(boolean up) {
         Group group = drawConstructLine(up, 4, colors[1]);
-
         group.setTranslateX(x);
         group.setTranslateY(y);
 
@@ -276,14 +282,14 @@ class GamePane extends GridPane {
         Group group = drawConstructLine(true, 3, colors[3]);
         double translateX;
         double translateY;
-        if (position.equals("downLeft")) {
-            translateX = x + BLOCK_SIZE;
-            translateY = y;
-            position = "upRight";
-        } else {
+        if (position.equals("right")) {
             translateX = x - BLOCK_SIZE;
             translateY = y + BLOCK_SIZE * 2;
-            position = "upLeft";
+            position = "down";
+        } else {
+            translateX = x + BLOCK_SIZE;
+            translateY = y;
+            position = "up";
         }
         Rectangle rect2 = new Rectangle();
         rect2.setWidth(BLOCK_SIZE);
@@ -310,14 +316,14 @@ class GamePane extends GridPane {
         Group group = drawConstructLine(false, 3, colors[3]);
         double translateX;
         double translateY;
-        if (position.equals("upRight")) {
+        if (position.equals("up")) {
             translateX = x + BLOCK_SIZE * 2;
             translateY = y + BLOCK_SIZE;
-            position = "downRight";
+            position = "right";
         } else {
             translateX = x;
             translateY = y - BLOCK_SIZE;
-            position = "downLeft";
+            position = "left";
         }
         Rectangle rect2 = new Rectangle();
         rect2.setWidth(BLOCK_SIZE);
@@ -333,14 +339,14 @@ class GamePane extends GridPane {
         Group group = drawConstructLine(true, 3, colors[4]);
         double translateX;
         double translateY;
-        if (position.equals("downLeft")) {
-            translateX = x - BLOCK_SIZE;
-            translateY = y;
-            position = "upLeft";
-        } else {
+        if (position.equals("right")) {
             translateX = x + BLOCK_SIZE;
             translateY = y + BLOCK_SIZE * 2;
-            position = "upRight";
+            position = "down";
+        } else {
+            translateX = x - BLOCK_SIZE;
+            translateY = y;
+            position = "up";
         }
         Rectangle rect2 = new Rectangle();
         rect2.setWidth(BLOCK_SIZE);
@@ -362,14 +368,14 @@ class GamePane extends GridPane {
         Group group = drawConstructLine(false, 3, colors[4]);
         double translateX;
         double translateY;
-        if (position.equals("upLeft")) {
+        if (position.equals("up")) {
             translateX = x + BLOCK_SIZE * 2;
             translateY = y - BLOCK_SIZE;
-            position = "downRight";
+            position = "right";
         } else {
             translateX = x;
             translateY = y + BLOCK_SIZE;
-            position = "downLeft";
+            position = "left";
         }
         Rectangle rect2 = new Rectangle();
         rect2.setWidth(BLOCK_SIZE);
@@ -406,33 +412,33 @@ class GamePane extends GridPane {
     void controls() {
         start = false;
         y += dy;
-        cubeBordersLeft();
-        cubeBordersRight();
+        leftBorders();
+        rightBorders();
         if (y >= height / 2 - 2 * BLOCK_SIZE) {
             dy = 0;
             y = height / 2 - 2 * BLOCK_SIZE;
+            addToGroup();
+
         }
         setOnKeyPressed(ev -> {
-
             if (ev.getCode() == KeyCode.DOWN) {
-                if (dy <= 12) {
-                    dy += 2;
+                if (dy <= 10) {
+                    dy += 1;
                 }
-            }
-            if (ev.getCode() == KeyCode.RIGHT) {
-                if (cubeBordersLeft()) {
+            } else if (ev.getCode() == KeyCode.RIGHT) {
+                if (leftBorders() || rightBorders()) {
                     dx = SPEEDX;
                 }
                 x += dx * 2;
             } else if (ev.getCode() == KeyCode.LEFT) {
-                if (cubeBordersRight()) {
+                if (leftBorders() || rightBorders()) {
                     dx = SPEEDX;
                 }
                 x -= dx * 2;
             }
             Group toGo;
             if (current.equals("hook") && ev.getCode() == KeyCode.UP) {
-                if (position.equals("downRight") || position.equals("downLeft")) {
+                if (position.equals("right") || position.equals("left")) {
                     toGo = drawHookShaped();
                 } else {
                     toGo = drawHookShapedDown();
@@ -451,8 +457,8 @@ class GamePane extends GridPane {
                 line.getChildren().clear();
                 line.getChildren().add(toGo);
                 getChildren().add(line);
-            } else if (current.equals("tshaped") && ev.getCode() == KeyCode.UP) {
-                if (position.equals("upRight") || position.equals("upLeft")) {
+            } else if (current.equals("t") && ev.getCode() == KeyCode.UP) {
+                if (position.equals("right") || position.equals("left")) {
                     toGo = drawTShapedDown();
                 } else {
                     toGo = drawTShaped();
@@ -462,7 +468,7 @@ class GamePane extends GridPane {
                 Tshaped.getChildren().add(toGo);
                 getChildren().add(Tshaped);
             } else if (current.equals("hook2") && ev.getCode() == KeyCode.UP) {
-                if (position.equals("upRight") || position.equals("upLeft")) {
+                if (position.equals("up") || position.equals("down")) {
                     toGo = drawHookShaped2Down();
                 } else {
                     toGo = drawHookShaped2();
@@ -474,17 +480,12 @@ class GamePane extends GridPane {
             }
 
         });
-
         setOnKeyReleased(ev -> {
             if (ev.getCode() == KeyCode.DOWN) {
                 dy = SPEED;
             }
         });
         changeCoordinates();
-    }
-
-    private void directionSwitch() {
-
     }
 
     /**
@@ -508,7 +509,7 @@ class GamePane extends GridPane {
                 HookShaped2.setTranslateX(x);
                 HookShaped2.setTranslateY(y);
                 break;
-            case "tshaped":
+            case "t":
                 Tshaped.setTranslateX(x);
                 Tshaped.setTranslateY(y);
                 break;
@@ -516,29 +517,74 @@ class GamePane extends GridPane {
     }
 
     /**
-     * Cube left side border.
+     * Left side border.
      * @return true/false.
      */
-    private boolean cubeBordersLeft() {
+    private boolean leftBorders() {
         if (x <= 200) {
             dx = 0;
             x = 200;
-            return true;
-            }
-
-        return false;
-    }
-
-    private boolean cubeBordersRight() {
-        if (x >= width - 200 - BLOCK_SIZE * 2) {
-            dx = 0;
-            x = width - 200 - BLOCK_SIZE * 2;
             return true;
         }
         return false;
     }
 
-    private void addToGroup() {
+    /**
+     * Right side border.
+     * @return true/false
+     */
+    private boolean rightBorders() {
+        // Если понизить частоту кадров, то видно зависание при переключении состояния**
 
+        if (current.equals("line")) {
+            switch (position) {
+                case "down":
+                    if (x >= width - 200 - BLOCK_SIZE * 4) {
+                        dx = 0;
+                        x = width - 200 - BLOCK_SIZE * 4;
+                        return true;
+                    }
+                    break;
+                case "up":
+                    if (x <= width - 200 - BLOCK_SIZE * 4) {
+                        dx = SPEEDX;
+                    }
+                    if (x >= width - 200 - BLOCK_SIZE) {
+                        dx = 0;
+                        x = width - 200 - BLOCK_SIZE;
+                        return true;
+                    }
+                    break;
+            }
+        }
+        return false;
+    }
+
+    private void addToGroup() {
+        double nowX = x;
+        double nowY = y;
+        switch(current) {
+            case "line":
+                getChildren().remove(line);
+                switch (position) {
+                    case "up":
+                        Shapes.getChildren().add(drawLine(true));
+                        break;
+                    case "down":
+                        Shapes.getChildren().add(drawLine(false));
+                        break;
+                }
+                break;
+            case "cube": // в разных случаях добавляем в группу разные фигуры
+                getChildren().remove(cube);
+                Shapes.getChildren().add(cube);
+        }
+        Shapes.setTranslateX(nowX);
+        Shapes.setTranslateY(nowY);
+        getChildren().add(Shapes);
+        x = 270;
+        y = -300;
+        start = true;
+        // Почему я не могу отсюда вызвать controls() напрямую? (пропадает возможность двигать объект) Из-за рекурсии?
     }
 }

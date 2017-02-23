@@ -61,8 +61,8 @@ class SettingsPane extends GridPane {
         colorLabel.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 20));
         //colorLabel.setTranslateX(120);
         musicOnOff.setTranslateX(150);
-        musicOnOff.setTranslateY(-450);
-        musicOnOff.setSelected(false);
+        musicOnOff.setTranslateY(-250);
+        musicOnOff.setSelected(true);
         musicOnOff.setTextFill(Color.WHITE);
         add(red, 1, 1);
         add(white, 1, 2);

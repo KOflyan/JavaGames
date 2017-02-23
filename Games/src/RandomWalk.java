@@ -17,6 +17,9 @@ import java.util.Random;
 
 import static java.util.Arrays.asList;
 
+/**
+ * Random Walk.
+ */
 public class RandomWalk extends Application {
 
     private final int STEP = 40;
@@ -34,12 +37,16 @@ public class RandomWalk extends Application {
     private Random rand = new Random();
     private Label over = new Label("Game over!");
 
+    /**
+     * Class constructor.
+     */
     public RandomWalk() {
         pane.getChildren().add(start);
         start.setPrefSize(100, 25);
         start.setTranslateX(W - 210 + STEP);
         start.setTranslateY(H - 80);
     }
+
     /**
      * Main
      */
@@ -53,6 +60,7 @@ public class RandomWalk extends Application {
         primaryStage.show();
         pane.requestFocus();
     }
+
     /**
      * Append cross points to array
      */
@@ -74,6 +82,7 @@ public class RandomWalk extends Application {
             v_step += STEP;
         }
     }
+
     /**
      * Draw paths
      */
@@ -85,6 +94,7 @@ public class RandomWalk extends Application {
             step += STEP;
         }
     }
+
     /**
      * Button action
      */
@@ -109,8 +119,8 @@ public class RandomWalk extends Application {
         pane.getChildren().add(new Circle(x1, y1, rad));
         pane.getChildren().add(new Line(x1, y1, x2, y2));
         pane.getChildren().add(new Circle(x2, y2, rad));
-
     }
+
     /**
      * Game loop
      */
@@ -157,7 +167,7 @@ public class RandomWalk extends Application {
 
                 if (index + 1 == points.size()) {
                     timeline.stop();
-                    startAgain();
+                    pane.getChildren().add(over);
                 }
                 if (pointsVisited.contains(new ArrayList<>(asList(x1 + STEP, y1))) &&
                         pointsVisited.contains(new ArrayList<>(asList(x1 - STEP, y1))) &&
@@ -165,7 +175,7 @@ public class RandomWalk extends Application {
                         pointsVisited.contains(new ArrayList<>(asList(x1, y1 + STEP)))
                         ) {
                     timeline.stop();
-                    startAgain();
+                    pane.getChildren().add(over);
                 }
                 if (!(x2 < STEP || x2 > 680 || y2 < STEP || y2 > 680) && !pointsVisited.contains(p)) {
 
@@ -181,8 +191,7 @@ public class RandomWalk extends Application {
                 }
                 if (check.size() == 4) {
                     timeline.stop();
-                    startAgain();
-
+                    pane.getChildren().add(over);
                 }
             }
         });
@@ -190,6 +199,7 @@ public class RandomWalk extends Application {
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
     }
+
     private void startAgain() {
 
         pane.getChildren().clear();

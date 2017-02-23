@@ -36,7 +36,7 @@ public class Main extends Application {
     private Random rand = new Random();
 
     /**
-     * Main mehod.
+     * Main method.
      * @param primaryStage Stage.
      */
     @Override
@@ -61,9 +61,7 @@ public class Main extends Application {
         startPane.getScores().setOnMouseClicked(ev -> primaryStage.setScene(scoresScene));
         startPane.getStart().setOnMouseClicked(ev -> {
             game(primaryStage);
-
         });
-
         startPane.getSettings().setOnMouseClicked(ev -> primaryStage.setScene(settingsScene));
         settingsPane.getBack().setOnMouseClicked(ev -> {
             primaryStage.setScene(startScene);
@@ -104,7 +102,6 @@ public class Main extends Application {
             mediaPlayer.setCycleCount(INDEFINITE);
         }
         // Show
-        mediaPlayer.setVolume(30);
         primaryStage.show();
     }
 
@@ -113,7 +110,7 @@ public class Main extends Application {
      * @return width.
      */
     int getWidth() {
-        return this.width;
+        return width;
     }
 
     /**
@@ -121,7 +118,7 @@ public class Main extends Application {
      * @return height.
      */
     int getHeight() {
-        return this.height;
+        return height;
     }
 
     /**
@@ -130,12 +127,12 @@ public class Main extends Application {
      */
     private void game(Stage stage) {
         GamePane gamePane = new GamePane();
-        gamePane.drawShapes(4);
-        timeline = new Timeline(new KeyFrame(Duration.seconds(0.05), event -> gamePane.controls()));
+        gamePane.drawShapes(1); // Нужно сделать собственный таймлайн в логике, либо как-то обойти
+        timeline = new Timeline(new KeyFrame(Duration.seconds(0.015), event -> gamePane.controls()));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
         stage.setScene(new Scene(gamePane));
-        gamePane.requestFocus();
+        gamePane.requestFocus(); // Потом узнать, зачем
     }
 
     /**
