@@ -24,8 +24,8 @@ class OverPane extends StackPane {
     OverPane() {
         Label label = new Label("Game Over!");
         Label label2 = new Label("Would you like to try again?");
-        int width = new Main().getWidth();
-        int height = new Main().getHeight();
+        int width = Main.getWidth();
+        int height = Main.getHeight();
         setPrefSize(width, height);
         setAlignment(Pos.BOTTOM_CENTER);
         //setPadding(new Insets(50));

@@ -23,8 +23,8 @@ class GamePane extends GridPane {
     private final double SPEED = 1;
     private final int SPEEDX = 10;
     private final int BLOCK_SIZE = 30;
-    private final int width = new Main().getWidth();
-    private final int height = new Main().getHeight();
+    private final int width = Main.getWidth();
+    private final int height = Main.getHeight();
 
     private Color[] colors = {Color.BLUE, Color.DARKGREY, Color.DARKGREEN, Color.AQUAMARINE, Color.ORANGE};
     private double dx = SPEEDX;
@@ -60,7 +60,6 @@ class GamePane extends GridPane {
         rectBottom.setTranslateX(0);
         rectBottom.setTranslateY(400);
         rectBottom.setFill(color);
-
         rectRight.setHeight(height + 10);
         rectRight.setWidth(200);
         rectRight.setTranslateX(width - 200);
@@ -418,7 +417,6 @@ class GamePane extends GridPane {
             dy = 0;
             y = height / 2 - 2 * BLOCK_SIZE;
             addToGroup();
-
         }
         setOnKeyPressed(ev -> {
             if (ev.getCode() == KeyCode.DOWN) {

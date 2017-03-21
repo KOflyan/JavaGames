@@ -23,12 +23,12 @@ public class Main extends Application {
     /**
      * Screen width.
      */
-    private final int width = 800;
+    private static final int width = 800;
 
     /**
      * Screen height.
      */
-    private final int height = 800;
+    private static final int height = 800;
 
     private Timeline timeline;
     private boolean run = false;
@@ -109,7 +109,7 @@ public class Main extends Application {
      * Resolve width of the screen.
      * @return width.
      */
-    int getWidth() {
+    static int getWidth() {
         return width;
     }
 
@@ -117,7 +117,7 @@ public class Main extends Application {
      * Resolve height of the screen.
      * @return height.
      */
-    int getHeight() {
+    static int getHeight() {
         return height;
     }
 
@@ -128,7 +128,7 @@ public class Main extends Application {
     private void game(Stage stage) {
         GamePane gamePane = new GamePane();
         gamePane.drawShapes(1); // Нужно сделать собственный таймлайн в логике, либо как-то обойти
-        timeline = new Timeline(new KeyFrame(Duration.seconds(0.015), event -> gamePane.controls()));
+        timeline = new Timeline(new KeyFrame(Duration.seconds(0.015), ev -> gamePane.controls()));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
         stage.setScene(new Scene(gamePane));

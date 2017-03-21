@@ -33,8 +33,8 @@ class SettingsPane extends GridPane {
      * Class constructor.
      */
     SettingsPane() {
-        int width = new Main().getWidth();
-        int height = new Main().getHeight();
+        int width = Main.getWidth();
+        int height = Main.getHeight();
         HBox hbox = new HBox();
         hbox.setTranslateY(0);
         hbox.setTranslateX(140);
