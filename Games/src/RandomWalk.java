@@ -48,7 +48,7 @@ public class RandomWalk extends Application {
     }
 
     /**
-     * Main
+     * Main method.
      */
     @Override
     public void start(Stage primaryStage) {
@@ -62,7 +62,7 @@ public class RandomWalk extends Application {
     }
 
     /**
-     * Append cross points to array
+     * Append cross points to array.
      */
     private void appendPoints() {
         int index = 0;
@@ -84,7 +84,7 @@ public class RandomWalk extends Application {
     }
 
     /**
-     * Draw paths
+     * Draw paths.
      */
     private void drawWeb() {
         double step = 0;
@@ -96,7 +96,7 @@ public class RandomWalk extends Application {
     }
 
     /**
-     * Button action
+     * Button action.
      */
     private void gameStart() {
         start.setOnMouseClicked(e -> {
@@ -122,7 +122,7 @@ public class RandomWalk extends Application {
     }
 
     /**
-     * Game loop
+     * Game loop.
      */
     private void game() {
         KeyFrame frame = new KeyFrame(Duration.seconds(0.3), e -> {
@@ -147,19 +147,14 @@ public class RandomWalk extends Application {
                     case 0:
                         x2 = x1 - STEP;
                         break;
-
                     case 1:
                         x2 = x1 + STEP;
                         break;
-
                     case 2:
                         y2 = y1 - STEP;
                         break;
-
                     case 3:
                         y2 = y1 + STEP;
-                        break;
-                    default:
                         break;
                 }
                 p.add(0, x2);
@@ -200,17 +195,10 @@ public class RandomWalk extends Application {
         timeline.play();
     }
 
-    private void startAgain() {
-
-        pane.getChildren().clear();
-        pointsVisited.clear();
-        check.clear();
-        drawWeb();
-        gameStart();
-        pane.getChildren().add(start);
-        index = 0;
-    }
-
+    /**
+     * Main
+     * @param args args from cmd
+     */
     public static void main(String[] args){
         launch(args);
     }
