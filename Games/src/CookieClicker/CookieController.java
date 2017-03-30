@@ -43,8 +43,7 @@ public class CookieController {
     /** Cookie image. */
     @FXML public ImageView cookie;
     /** Additional part. */
-    @FXML  public Button hiddenButton;
-
+    @FXML public ImageView cookieEater;
     /** Timeline. */
     private Timeline timeline = new Timeline();
 
@@ -110,7 +109,7 @@ public class CookieController {
     public void clickAction() {
         cookieGame.click();
         setCookies();
-        if (hiddenButton.isVisible()) {
+        if (cookieEater.isVisible()) {
             placeShape();
         }
     }
@@ -140,7 +139,7 @@ public class CookieController {
         cookie.setScaleY(0.9);
     }
 
-    /** Resize poor CookieClicker back. */
+    /** Resize poor cookie back. */
     public void changeCookieBack() {
         cookie.setScaleX(1);
         cookie.setScaleY(1);
@@ -148,24 +147,24 @@ public class CookieController {
 
     /** Set fun action. */
     public void setFun() {
-        if (hiddenButton.isVisible()) {
-            hiddenButton.setVisible(false);
-            secondState.setText("You're weak!");
-            fun.setText(">>FUN MODE<<");
+        if (cookieEater.isVisible()) {
+            cookieEater.setVisible(false);
+            secondState.setText("Thanks to Cookie Lord, he is gone...\nfor now.");
+            fun.setText("Summon again");
             return;
         }
         placeShape();
-        secondState.setText("Watch your click now!");
-        fun.setText("End fun");
-        hiddenButton.setVisible(true);
+        secondState.setText("Avoid clicking on him!");
+        fun.setText("Go away, you beast!");
+        cookieEater.setVisible(true);
     }
 
     /** Replace the shape. */
     private void placeShape() {
         double x = ThreadLocalRandom.current().nextDouble(cookie.getLayoutX() - cookie.getFitWidth() / 3, cookie.getLayoutX() + cookie.getFitWidth() / 3 - 20 + 1);
         double y = ThreadLocalRandom.current().nextDouble(cookie.getLayoutY() - cookie.getFitHeight() + 70, cookie.getLayoutY());
-        hiddenButton.setTranslateX(x);
-        hiddenButton.setTranslateY(y);
+        cookieEater.setTranslateX(x);
+        cookieEater.setTranslateY(y);
     }
 
     /** Additional func. */
