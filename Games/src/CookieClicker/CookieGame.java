@@ -142,9 +142,7 @@ public class CookieGame {
         return clickerInterval;
     }
 
-    /**
-     * Clicker action.
-     */
+    /** Clicker action. */
     public void clickerAction() {
         if (clickerCount == 0) {
             return;
