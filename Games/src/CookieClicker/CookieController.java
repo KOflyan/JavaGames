@@ -1,6 +1,5 @@
 package CookieClicker;
 
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
@@ -44,15 +43,13 @@ public class CookieController {
     @FXML public ImageView cookie;
     /** Additional part. */
     @FXML public ImageView cookieEater;
-    /** Timeline. */
-    private Timeline timeline = new Timeline();
 
-    /** Set price. */
-    public void setCursors() {
+    /** Set count. */
+    private void setCursors() {
         cursors.setText(toStr(cookieGame.getCursorCount()));
     }
 
-    /** Set price. */
+    /** Set count. */
     private void setClickers() {
         clickers.setText(toStr(cookieGame.getClickerCount()));
     }
@@ -116,21 +113,23 @@ public class CookieController {
 
     /** Set automatic click. */
     private void clickerAction() {
-        if (cookieGame.getClickerCount() > 0) {
-            int rate = cookieGame.getClickerInterval();
-            if (timeline.getStatus() == Animation.Status.RUNNING) {
-                timeline.stop();
-                timeline.getKeyFrames().clear();
-            }
+        if (cookieGame.getClickerCount() == 0) {
+            return;
+        }
+        int rate = cookieGame.getClickerInterval();
+        Timeline timeline = new Timeline();
             System.out.println(rate);
-            KeyFrame keyFrame = new KeyFrame(Duration.millis(rate), ev -> {
+        Timeline changeSize = new Timeline(new KeyFrame(Duration.millis(100), ev -> changeCookieBack()));
+
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(rate), ev -> {
                 cookieGame.clickerAction();
                 setCookies();
+                changeCookie();
+                changeSize.play();
             });
             timeline.getKeyFrames().add(keyFrame);
             timeline.setCycleCount(Timeline.INDEFINITE);
             timeline.play();
-        }
     }
 
     /** Set new size. */
@@ -161,10 +160,27 @@ public class CookieController {
 
     /** Replace the shape. */
     private void placeShape() {
-        double x = ThreadLocalRandom.current().nextDouble(cookie.getLayoutX() - cookie.getFitWidth() / 3, cookie.getLayoutX() + cookie.getFitWidth() / 3 - 20 + 1);
-        double y = ThreadLocalRandom.current().nextDouble(cookie.getLayoutY() - cookie.getFitHeight() + 70, cookie.getLayoutY());
+        double x = ThreadLocalRandom.current().nextDouble(cookie.getLayoutX() - cookie.getFitWidth() / 3,
+                cookie.getLayoutX() + cookie.getFitWidth() / 3 - 20 + 1);
+        double y = ThreadLocalRandom.current().nextDouble(cookie.getLayoutY() - cookie.getFitHeight() + 70,
+                cookie.getLayoutY() + 1);
         cookieEater.setTranslateX(x);
         cookieEater.setTranslateY(y);
+        eaterGrow();
+    }
+
+    /** Cookie Eater grows as its hunger! */
+    private void eaterGrow() {
+        if (cookieGame.getCookies() >= 400) {
+            cookieEater.setScaleX(1.5);
+            cookieEater.setScaleY(1.5);
+        } else if (cookieGame.getCookies() >= 200) {
+            cookieEater.setScaleX(1.2);
+            cookieEater.setScaleY(1.2);
+        } else {
+            cookieEater.setScaleX(1);
+            cookieEater.setScaleY(1);
+        }
     }
 
     /** Additional func. */

@@ -149,9 +149,12 @@ public class CookieGame {
         if (clickerCount == 0) {
             return;
         }
+        click();
+        /*
         for (int i = 0; i < clickerCount; i++) {
             click();
         }
+        */
     }
 
     /**
@@ -169,6 +172,6 @@ public class CookieGame {
 
     /** Bonus action. */
     public void decrement() {
-        cookies -= cursorCount * MAGIC;
+        cookies -= cursorCount * MAGIC * 2;
     }
 }
