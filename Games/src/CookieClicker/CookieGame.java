@@ -99,6 +99,10 @@ public class CookieGame {
         return cursorPrice + cursorPriceIncrease * (cursorCount - 1);
     }
 
+    /**
+     * Can you buy a clicker?
+     * @return bool
+     */
     public boolean canBuyClicker() {
         return cookies >= getClickerPrice();
     }
@@ -170,6 +174,6 @@ public class CookieGame {
 
     /** Bonus action. */
     public void decrement() {
-        cookies -= cursorCount * MAGIC * 2;
+        cookies -= cursorCount * MAGIC * (clickerCount > 1 ? clickerCount : 2);
     }
 }
