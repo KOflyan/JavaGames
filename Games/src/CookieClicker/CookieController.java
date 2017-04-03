@@ -230,9 +230,9 @@ public class CookieController {
 
     /** Replace the shape. */
     private void placeShape() {
-        double x = generateRandom(cookie.getLayoutX() - cookie.getFitWidth() / 3,
+        double x = generateRandom(cookie.getLayoutX() - cookie.getFitWidth() / 3 - 40,
                 cookie.getLayoutX() + cookie.getFitWidth() / 3 - 20 + 1);
-        double y = generateRandom(cookie.getLayoutY() - cookie.getFitHeight() + 70, cookie.getLayoutY() + 1);
+        double y = generateRandom(cookie.getLayoutY() - cookie.getFitHeight() + 70, cookie.getLayoutY() - 10);
         cookieEater.setTranslateX(x);
         cookieEater.setTranslateY(y);
         eaterGrow();
@@ -263,7 +263,7 @@ public class CookieController {
         placeShape();
     }
 
-    /**Set small cookies animation. */
+    /** Set small cookies animation. */
     private void setSmallCookies() {
         for (int i = 0; i < generateRandom(1, 4); i++) {
             ImageView cookie = new ImageView(new Image(getClass().getResourceAsStream("images/cookie.png")));
