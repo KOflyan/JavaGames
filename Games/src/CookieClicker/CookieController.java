@@ -5,6 +5,7 @@ import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
@@ -13,6 +14,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 
 public class CookieController {
+
     /** Game initializer. */
     private CookieGame cookieGame = new CookieGame();
     /** Info. */
@@ -44,6 +46,7 @@ public class CookieController {
     /** Additional part. */
     @FXML public ImageView cookieEater;
 
+
     /** Set count. */
     private void setCursors() {
         cursors.setText(toStr(cookieGame.getCursorCount()));
@@ -67,6 +70,72 @@ public class CookieController {
     /** Set price. */
     private void setClickerPrice() {
         clickerPrice.setText(toStr(cookieGame.getClickerPrice()));
+    }
+
+    /** Just a random javadoc passing by. */
+    public void changeInfoStyle() {
+        changeButtonStyle(info);
+    }
+
+    /** And another one... */
+    public void changeInfoBack() {
+        changeButtonStyleBack(info);
+    }
+
+    /** There is plenty of them out here! */
+    public void changeCursorStyle() {
+        changeButtonStyle(buyCursor);
+    }
+
+    /** Seriously, why are you reading this? */
+    public void changeCursorBack() {
+        changeButtonStyleBack(buyCursor);
+    }
+
+    /** Yes, it is obvious what is happening here. I wont waste my time explaining additionally. */
+    public void changeClickerStyle() {
+        changeButtonStyle(buyClicker);
+    }
+
+    /** These functions do the same. Yes, a shit code it is. */
+    public void changeClickerBack() {
+        changeButtonStyleBack(buyClicker);
+    }
+
+    /** Here goes another one. */
+    public void changeOkStyle() {
+        changeButtonStyle(ok);
+    }
+
+    /** And another one... */
+    public void changeOkBack() {
+        changeButtonStyleBack(ok);
+    }
+
+    /** I can do this all day. Just stop reading those. */
+    public void changeSummonStyle() {
+        changeButtonStyle(fun);
+    }
+
+    /** Woah. */
+    public void changeSummonBack() {
+        changeButtonStyleBack(fun);
+    }
+
+    /**
+     * Change button color to dark grey (somehow it is lighter than just "grey").
+     * @param button button
+     */
+    private void changeButtonStyle(Button button) {
+        button.setStyle("-fx-color: darkgrey");
+    }
+
+    /**
+     * Change the color back.
+     * @param button button
+     */
+    private void changeButtonStyleBack(Button button) {
+        button.setStyle("-fx-color: grey");
     }
 
     /** Buy. */
@@ -109,6 +178,7 @@ public class CookieController {
         if (cookieEater.isVisible()) {
             placeShape();
         }
+        setSmallCookies();
     }
 
     /** Set automatic click. */
@@ -118,15 +188,15 @@ public class CookieController {
         }
         int rate = cookieGame.getClickerInterval();
         Timeline timeline = new Timeline();
-            System.out.println(rate);
-        Timeline changeSize = new Timeline(new KeyFrame(Duration.millis(100), ev -> changeCookieBack()));
-
+        System.out.println(rate);
+        Timeline changeSize = new Timeline(new KeyFrame(Duration.millis(150), ev -> changeCookieBack()));
         KeyFrame keyFrame = new KeyFrame(Duration.millis(rate), ev -> {
                 cookieGame.clickerAction();
                 setCookies();
                 changeCookie();
                 changeSize.play();
-            });
+                setSmallCookies();
+        });
             timeline.getKeyFrames().add(keyFrame);
             timeline.setCycleCount(Timeline.INDEFINITE);
             timeline.play();
@@ -160,10 +230,9 @@ public class CookieController {
 
     /** Replace the shape. */
     private void placeShape() {
-        double x = ThreadLocalRandom.current().nextDouble(cookie.getLayoutX() - cookie.getFitWidth() / 3,
+        double x = generateRandom(cookie.getLayoutX() - cookie.getFitWidth() / 3,
                 cookie.getLayoutX() + cookie.getFitWidth() / 3 - 20 + 1);
-        double y = ThreadLocalRandom.current().nextDouble(cookie.getLayoutY() - cookie.getFitHeight() + 70,
-                cookie.getLayoutY() + 1);
+        double y = generateRandom(cookie.getLayoutY() - cookie.getFitHeight() + 70, cookie.getLayoutY() + 1);
         cookieEater.setTranslateX(x);
         cookieEater.setTranslateY(y);
         eaterGrow();
@@ -172,15 +241,19 @@ public class CookieController {
     /** Cookie Eater grows as its hunger! */
     private void eaterGrow() {
         if (cookieGame.getCookies() >= 400) {
-            cookieEater.setScaleX(1.5);
-            cookieEater.setScaleY(1.5);
+            setEaterScale(1.5, 1.5);
         } else if (cookieGame.getCookies() >= 200) {
-            cookieEater.setScaleX(1.2);
-            cookieEater.setScaleY(1.2);
+            secondState.setText("He grows as his hunger does...");
+            setEaterScale(1.2, 1.2);
         } else {
-            cookieEater.setScaleX(1);
-            cookieEater.setScaleY(1);
+            setEaterScale(1, 1);
         }
+    }
+
+    /** Change the size of the shape. */
+    private void setEaterScale(double dx, double dy) {
+        cookieEater.setScaleX(dx);
+        cookieEater.setScaleY(dy);
     }
 
     /** Additional func. */
@@ -188,6 +261,40 @@ public class CookieController {
         cookieGame.decrement();
         setCookies();
         placeShape();
+    }
+
+    /**Set small cookies animation. */
+    private void setSmallCookies() {
+        for (int i = 0; i < generateRandom(1, 4); i++) {
+            ImageView cookie = new ImageView(new Image(getClass().getResourceAsStream("images/cookie.png")));
+            cookie.setLayoutX(generateRandom(25, 210));
+            cookie.setLayoutY(generateRandom(50, 260));
+            CookieFX.addImageView(cookie);
+            double dx = cookie.getLayoutX() > 100 ? 2 : -2;
+            double dy = cookie.getLayoutY() > 145 ? 2 : -2;
+            Timeline timeline = new Timeline();
+            KeyFrame keyFrame = new KeyFrame(Duration.millis(10), ev -> {
+                cookie.setTranslateX(cookie.getTranslateX() + dx);
+                cookie.setTranslateY(cookie.getTranslateY() + dy);
+                if (cookie.getOpacity() > 0) {
+                    cookie.setOpacity(cookie.getOpacity() - 0.015);
+                }
+            });
+            timeline.getKeyFrames().add(keyFrame);
+            timeline.setCycleCount(Timeline.INDEFINITE);
+            timeline.play();
+        }
+
+    }
+
+    /** Generate random int. */
+    private int generateRandom(int x, int y) {
+        return ThreadLocalRandom.current().nextInt(x, y + 1);
+    }
+
+    /** Overload for double. */
+    private double generateRandom(double x, double y) {
+        return ThreadLocalRandom.current().nextDouble(x, y + 1);
     }
 
     /**

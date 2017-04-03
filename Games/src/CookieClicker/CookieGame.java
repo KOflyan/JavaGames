@@ -152,11 +152,6 @@ public class CookieGame {
             return;
         }
         click();
-        /*
-        for (int i = 0; i < clickerCount; i++) {
-            click();
-        }
-        */
     }
 
     /**
