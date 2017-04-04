@@ -12,7 +12,7 @@ import javafx.util.Duration;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-
+/** FXML handler. */
 public class CookieController {
 
     /** Game initializer. */
@@ -166,9 +166,7 @@ public class CookieController {
 
     /** Close. */
     public void infoClose() {
-        if (infoPane.isVisible()) {
-            infoPane.setVisible(false);
-        }
+        infoPane.setVisible(false);
     }
 
     /** Casual. */
@@ -233,8 +231,8 @@ public class CookieController {
         double x = generateRandom(cookie.getLayoutX() - cookie.getFitWidth() / 3 - 40,
                 cookie.getLayoutX() + cookie.getFitWidth() / 3 - 20 + 1);
         double y = generateRandom(cookie.getLayoutY() - cookie.getFitHeight() + 70, cookie.getLayoutY() - 10);
-        cookieEater.setTranslateX(x);
-        cookieEater.setTranslateY(y);
+        cookieEater.setX(x);
+        cookieEater.setY(y);
         eaterGrow();
     }
 
@@ -265,7 +263,7 @@ public class CookieController {
 
     /** Set small cookies animation. */
     private void setSmallCookies() {
-        for (int i = 0; i < generateRandom(1, 4); i++) {
+        for (int i = 0; i < generateRandom(1, cookieGame.getCursorCount() < 10 ? cookieGame.getCursorCount() : 10); i++) {
             ImageView cookie = new ImageView(new Image(getClass().getResourceAsStream("images/cookie.png")));
             cookie.setLayoutX(generateRandom(25, 210));
             cookie.setLayoutY(generateRandom(50, 260));
@@ -278,13 +276,14 @@ public class CookieController {
                 cookie.setTranslateY(cookie.getTranslateY() + dy);
                 if (cookie.getOpacity() > 0) {
                     cookie.setOpacity(cookie.getOpacity() - 0.015);
+                } else {
+                    timeline.stop();
                 }
             });
             timeline.getKeyFrames().add(keyFrame);
             timeline.setCycleCount(Timeline.INDEFINITE);
             timeline.play();
         }
-
     }
 
     /** Generate random int. */

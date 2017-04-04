@@ -81,7 +81,7 @@
                </font></Label>
          </children>
       </Pane>
-      <Label fx:id="cookies" layoutX="226.0" layoutY="78.0" text="0" textFill="WHITE">
+      <Label fx:id="cookies" alignment="CENTER" contentDisplay="CENTER" layoutX="226.0" layoutY="78.0" text="0" textFill="WHITE">
          <font>
             <Font size="36.0" />
          </font></Label>
