@@ -119,7 +119,6 @@ public class CookieGame {
             ++clickerCount;
             changeClickerInterval();
         }
-
     }
 
     /** Set new interval. */
