@@ -1,4 +1,5 @@
 
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -27,7 +28,7 @@ public class RandomWalk extends Application {
     private final int H = 780;
     private final int rad = 4;
     private static int index = 0;
-    private boolean isStart = true;
+    private boolean isStart = false;
     private Button start = new Button("Start");
     private Pane pane = new Pane();
     private Timeline timeline = new Timeline();
@@ -37,33 +38,25 @@ public class RandomWalk extends Application {
     private Random rand = new Random();
     private Label over = new Label("Game over!");
 
-    /**
-     * Class constructor.
-     */
+    /** Class constructor. */
     public RandomWalk() {
+        pane.setPrefSize(W, H);
         pane.getChildren().add(start);
         start.setPrefSize(100, 25);
         start.setTranslateX(W - 210 + STEP);
         start.setTranslateY(H - 80);
     }
 
-    /**
-     * Main method.
-     */
+    /** Main method. */
     @Override
     public void start(Stage primaryStage) {
-        drawWeb();
         appendPoints();
-        gameStart();
-
-        primaryStage.setScene(new Scene(pane, W, H));
+        primaryStage.setScene(new Scene(pane));
         primaryStage.show();
         pane.requestFocus();
     }
 
-    /**
-     * Append cross points to array.
-     */
+    /** Append cross points to array. */
     private void appendPoints() {
         int index = 0;
         double h_step = STEP;
@@ -81,11 +74,10 @@ public class RandomWalk extends Application {
             h_step = STEP;
             v_step += STEP;
         }
+        drawWeb();
     }
 
-    /**
-     * Draw paths.
-     */
+    /** Draw paths. */
     private void drawWeb() {
         double step = 0;
         for (int i = 0; i < 17; i++) {
@@ -93,14 +85,15 @@ public class RandomWalk extends Application {
             pane.getChildren().add(new Line(STEP, step + STEP, 680, step + STEP));
             step += STEP;
         }
+        gameStart();
     }
 
-    /**
-     * Button action.
-     */
+    /** Button action. */
     private void gameStart() {
         start.setOnMouseClicked(e -> {
-
+            if (isStart) {
+                return;
+            }
             isStart = true;
             pane.getChildren().add(new Circle(points.get(144).get(0), points.get(144).get(1), rad));
             pointsVisited.add(points.get(144));
@@ -117,13 +110,13 @@ public class RandomWalk extends Application {
      */
     private void drawThings(double x1, double y1, double x2, double y2){
         pane.getChildren().add(new Circle(x1, y1, rad));
-        pane.getChildren().add(new Line(x1, y1, x2, y2));
+        Line line = new Line(x1, y1, x2, y2);
+        line.setStrokeWidth(3);
+        pane.getChildren().add(line);
         pane.getChildren().add(new Circle(x2, y2, rad));
     }
 
-    /**
-     * Game loop.
-     */
+    /** Game loop. */
     private void game() {
         KeyFrame frame = new KeyFrame(Duration.seconds(0.3), e -> {
             if (isStart) {
@@ -144,17 +137,13 @@ public class RandomWalk extends Application {
                     }
                 }
                 switch (direction) {
-                    case 0:
-                        x2 = x1 - STEP;
+                    case 0: x2 = x1 - STEP;
                         break;
-                    case 1:
-                        x2 = x1 + STEP;
+                    case 1: x2 = x1 + STEP;
                         break;
-                    case 2:
-                        y2 = y1 - STEP;
+                    case 2: y2 = y1 - STEP;
                         break;
-                    case 3:
-                        y2 = y1 + STEP;
+                    case 3: y2 = y1 + STEP;
                         break;
                 }
                 p.add(0, x2);
@@ -173,13 +162,11 @@ public class RandomWalk extends Application {
                     pane.getChildren().add(over);
                 }
                 if (!(x2 < STEP || x2 > 680 || y2 < STEP || y2 > 680) && !pointsVisited.contains(p)) {
-
                     pointsVisited.add(index + 1, p);
                     drawThings(x1, y1, x2, y2);
                     index += 1;
                     check.clear();
-                }
-                else {
+                } else {
                     if (!check.contains(direction)) {
                         check.add(direction);
                     }
