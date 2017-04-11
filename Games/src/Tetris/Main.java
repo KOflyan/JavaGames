@@ -1,39 +1,40 @@
 package Tetris;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import Tetris.Interface.OverPane;
+import Tetris.Interface.ScoresPane;
+import Tetris.Interface.SettingsPane;
+import Tetris.Interface.StartPane;
+import Tetris.logic.GamePane;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.RadioButton;
+import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.io.File;
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 
-import static javafx.scene.media.AudioClip.INDEFINITE;
 
-/**
- * Main.
- */
+/** Main. */
 public class Main extends Application {
 
-    /**
-     * Screen width.
-     */
+    /** Screen width. */
     private static final int width = 800;
-
-    /**
-     * Screen height.
-     */
+    /** Screen height. */
     private static final int height = 800;
-
-    private Timeline timeline;
-    private boolean run = false;
-    private String mediaPath = "Games/src/Tetris/music/Troika.mp3";
-    private Random rand = new Random();
+    /** Background image */
+    private Image backgroundImage;
+    /** Game over image */
+    private Image overImage;
+    /** Names of tracks. Array. */
+    private String[] tracks = {"Troika.mp3", "Loginska.mp3", "Karinka.mp3"};
+    /** Current media player */
+    private static MediaView current = new MediaView();
 
     /**
      * Main method.
@@ -41,17 +42,33 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
-        // Media
-        Media media = new Media(new File(mediaPath).toURI().toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
-        // Panes
-        StartPane startPane = new StartPane();
-        OverPane overPane = new OverPane();
-        ScoresPane scoresPane = new ScoresPane();
-        SettingsPane settingsPane = new SettingsPane();
-        // Scenes
-        Scene settingsScene = new Scene(settingsPane);
+        setImages();
+        panesOnAction(new StartPane(backgroundImage), new SettingsPane(backgroundImage), new OverPane(overImage),
+                new ScoresPane(backgroundImage), primaryStage);
+        //primaryStage.setResizable(false);
+        primaryStage.show();
+    }
+
+    /** Define background images */
+    private void setImages() {
+        backgroundImage = new Image(getClass().getResourceAsStream("Interface/love.jpg"),
+                width, height, false, true);
+        overImage = new Image(getClass().getResourceAsStream("Interface/loveOver.jpg"),
+                width, height, false, true);
+    }
+
+    /**
+     * Define panes' action events (mostly transitions).
+     * @param startPane Start Pane
+     * @param settingsPane Settings Pane
+     * @param overPane Over Pane
+     * @param scoresPane Scores Pane
+     * @param primaryStage Stage
+     */
+    private void panesOnAction(StartPane startPane, SettingsPane settingsPane,
+                               OverPane overPane, ScoresPane scoresPane, Stage primaryStage){
         Scene startScene = new Scene(startPane);
+        Scene settingsScene = new Scene(settingsPane);
         Scene overScene = new Scene(overPane);
         Scene scoresScene = new Scene(scoresPane);
         // Setting default scene
@@ -59,26 +76,86 @@ public class Main extends Application {
         // Switching between scenes
         startPane.getExit().setOnMouseClicked(ev -> System.exit(1));
         startPane.getScores().setOnMouseClicked(ev -> primaryStage.setScene(scoresScene));
-        startPane.getStart().setOnMouseClicked(ev -> {
-            game(primaryStage);
-        });
+        startPane.getStart().setOnMouseClicked(ev -> game(primaryStage));
         startPane.getSettings().setOnMouseClicked(ev -> primaryStage.setScene(settingsScene));
-        settingsPane.getBack().setOnMouseClicked(ev -> {
-            primaryStage.setScene(startScene);
-            settingsPane.setDefault();
-        });
+        settingsPane.getBack().setOnMouseClicked(ev -> primaryStage.setScene(startScene));
         scoresPane.getBack().setOnMouseClicked(ev -> primaryStage.setScene(startScene));
         overPane.getExit().setOnMouseClicked(ev -> System.exit(1));
         overPane.getStartOver().setOnMouseClicked(ev -> primaryStage.setScene(startScene));
-        // Music options
+        settingsAction(settingsPane);
+    }
+
+    /**
+     * Define settingsPane action events.
+     * @param settingsPane Settings Pane
+     */
+    private void settingsAction(SettingsPane settingsPane) {
         settingsPane.getMusicBox().setOnAction(ev -> {
             if (settingsPane.getMusicBox().isSelected()) {
-                mediaPlayer.play();
-                mediaPlayer.setCycleCount(INDEFINITE);
-            } else {
-                mediaPlayer.stop();
+                current = new MediaView();
+                radioAction(settingsPane);
+            } else if (current.getMediaPlayer() != null){
+                current.getMediaPlayer().stop();
+                current = null;
             }
         });
+        if (settingsPane.getMusicBox().isSelected()) {
+            radioAction(settingsPane);
+        }
+        setColorChoose(settingsPane);
+    }
+
+    private void radioAction(SettingsPane settingsPane) {
+        RadioButton troika = settingsPane.getTroika();
+        RadioButton loginska = settingsPane.getLoginska();
+        RadioButton karinka = settingsPane.getKarinka();
+        radioDefault(troika, loginska, karinka);
+
+        troika.setOnAction(ev -> {
+            if (troika.isSelected() && current != null) {
+                mediaPlay(0);
+            }
+        });
+        loginska.setOnAction(ev -> {
+            if (loginska.isSelected() && current != null) {
+                mediaPlay(1);
+            }
+        });
+        karinka.setOnAction(ev -> {
+            if (karinka.isSelected() && current != null) {
+                mediaPlay(2);
+            }
+        });
+    }
+
+    private void radioDefault(RadioButton... buttons) {
+        ArrayList<RadioButton> radioButtons = new ArrayList<>(Arrays.asList(buttons));
+        RadioButton selected = radioButtons.stream()
+                .filter(RadioButton::isSelected)
+                .findFirst()
+                .get();
+        mediaPlay(radioButtons.indexOf(selected));
+    }
+
+    private void mediaPlay(int index) {
+        String mediaPath = "Games/src/Tetris/music/";
+        if (current == null) {
+            return;
+        }
+        if (current.getMediaPlayer() != null) {
+            current.getMediaPlayer().stop();
+        }
+        current.setMediaPlayer(new MediaPlayer(new Media(new File(mediaPath + tracks[index]).toURI().toString())));
+        current.getMediaPlayer().setCycleCount(MediaPlayer.INDEFINITE);
+        current.getMediaPlayer().play();
+    }
+
+
+    /**
+     * Choose color.
+     * @param settingsPane Settings Pane
+     */
+    private void setColorChoose(SettingsPane settingsPane) {
         // Color choose
         settingsPane.getBlue().setOnMouseClicked(ev -> {
             settingsPane.changeColor("blue");
@@ -96,48 +173,36 @@ public class Main extends Application {
             settingsPane.changeColor("purple");
             settingsPane.chooseColorChange("purple");
         });
-        // Music is playing by default
-        if (settingsPane.getMusicBox().isSelected()) {
-            mediaPlayer.play();
-            mediaPlayer.setCycleCount(INDEFINITE);
-        }
-        // Show
-        primaryStage.show();
     }
 
     /**
-     * Resolve width of the screen.
-     * @return width.
+     * Getter.
+     * @return width
      */
-    static int getWidth() {
+    public static int getWidth() {
         return width;
     }
 
     /**
-     * Resolve height of the screen.
-     * @return height.
+     * Getter.
+     * @return height
      */
-    static int getHeight() {
+    public static int getHeight() {
         return height;
     }
 
     /**
      * Game logic.
-     * @param stage primaryStage.
+     * @param stage primaryStage
      */
     private void game(Stage stage) {
         GamePane gamePane = new GamePane();
-        gamePane.drawShapes(1); // Нужно сделать собственный таймлайн в логике, либо как-то обойти
-        timeline = new Timeline(new KeyFrame(Duration.seconds(0.015), ev -> gamePane.controls()));
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.play();
-        stage.setScene(new Scene(gamePane));
-        gamePane.requestFocus(); // Потом узнать, зачем
+        stage.setScene(gamePane.startGame());
     }
 
     /**
      * Main.
-     * @param args args.
+     * @param args args from cmd
      */
     public static void main(String[] args) {
         launch(args);
