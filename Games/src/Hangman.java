@@ -77,7 +77,7 @@ public class Hangman {
             boolean changed = false;
             System.out.println("\n" + "Guesses left: " + GUESS);
             System.out.println("The word is: " + GuessWord(word));
-            System.out.print("Please enter single character: ");
+            System.out.println("Please enter single character: ");
             character = input.next().charAt(0);
 
             for (int i = 0; i < WORD.length(); i++){
@@ -102,7 +102,6 @@ public class Hangman {
                 over = true;
             }
             if (over){
-
                 System.out.println("Would you like to play again? (y/n): ");
                 character = input.next().charAt(0);
                 if (character == 'y'){
