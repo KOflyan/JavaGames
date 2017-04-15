@@ -186,7 +186,7 @@ public class SettingsPane extends GridPane {
 
     /**
      * Resolve troika.
-     * @return troika
+     * @return button
      */
     public RadioButton getTroika() {
         return troika;
@@ -194,7 +194,7 @@ public class SettingsPane extends GridPane {
 
     /**
      * Resolve loginska.
-     * @return loginska
+     * @return button
      */
     public RadioButton getLoginska() {
         return loginska;
@@ -202,7 +202,7 @@ public class SettingsPane extends GridPane {
 
     /**
      * Resolve karinka.
-     * @return karinka
+     * @return button
      */
     public RadioButton getKarinka() {
         return karinka;
@@ -213,14 +213,14 @@ public class SettingsPane extends GridPane {
      * @param envColor set color.
      */
     public void changeColor(String envColor) {
-            try {
-                File file = new File("Games/src/Tetris/resc/Colors.txt");
-                PrintWriter writer = new PrintWriter(file);
-                writer.println(envColor);
-                writer.close();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+        try {
+            File file = new File("Games/src/Tetris/resc/Colors.txt");
+            PrintWriter writer = new PrintWriter(file);
+            writer.println(envColor);
+            writer.close();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     /**

@@ -5,11 +5,17 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 /** Game Over screen. */
 public class OverPane extends StackPane {
@@ -18,12 +24,9 @@ public class OverPane extends StackPane {
     /** Define exit button. */
     private Button exit = new Button("Exit");
 
-    /**
-     * Class constructor.
-     * @param backgroundImage background image
-     */
-    public OverPane(Image backgroundImage) {
-        setPanePrefs(Main.getWidth(), Main.getHeight(), backgroundImage);
+    /** Class constructor. */
+    public OverPane() {
+        setPanePrefs(Main.getWidth(), Main.getHeight());
         getChildren().addAll(startOver, exit);
     }
 
@@ -31,12 +34,13 @@ public class OverPane extends StackPane {
      * Set pane preferences.
      * @param width pane width
      * @param height pane height
-     * @param image background image
      */
-    private void setPanePrefs(int width, int height, Image image) {
+    private void setPanePrefs(int width, int height) {
+        Image backgroundImage = new Image(getClass().getResourceAsStream("loveOver.jpg"), width, height,
+                false, true);
         setPrefSize(width, height);
         setAlignment(Pos.BOTTOM_CENTER);
-        setBackground(image);
+        setBackground(backgroundImage);
         setLabels();
     }
 
@@ -88,5 +92,18 @@ public class OverPane extends StackPane {
      */
     public Button getExit() {
         return exit;
+    }
+
+    public static void dumpScoresToFile(int score) {
+        String toWrite = score + "\n";
+        try {
+            File file = new File("Games/src/Tetris/resc/Scores.txt");
+            FileWriter writer = new FileWriter(file, true);
+            BufferedWriter bw = new BufferedWriter(writer);
+            bw.write(toWrite);
+            bw.close();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 }

@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static Demo2.TetrisApp.TILE_SIZE;
+import static Tetris.logic.GamePane.BLOCK_SIZE;
 
 
 public class Shape {
@@ -42,14 +42,17 @@ public class Shape {
     }
 
     public void draw(GraphicsContext g) {
+
         g.setFill(color);
-        g.setStroke(Color.WHITE);
-        pieces.forEach(p -> g.fillRect(p.x * TILE_SIZE, p.y * TILE_SIZE, TILE_SIZE, TILE_SIZE));
+        g.setStroke(Color.BLACK);
+        pieces.forEach(p -> {
+            g.fillRect(p.x * BLOCK_SIZE, p.y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+            g.strokeRect(p.x * BLOCK_SIZE, p.y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+        });
     }
 
     /** Rotation: just set each piece's direction to its next. */
     public void rotate() {
-        System.out.println("Rotate!");
         pieces.forEach(p -> p.setDirection(p.directions.stream()
                 .map(Direction::nextDirection)
                 .collect(Collectors.toList()).toArray(new Direction[0])));
@@ -57,7 +60,6 @@ public class Shape {
 
     /** Borders. */
     public void rotateBack() {
-        System.out.println("Rotate back!");
         pieces.forEach(p -> p.setDirection(p.directions.stream()
                 .map(Direction::previousDirection)
                 .collect(Collectors.toList())

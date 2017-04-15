@@ -1,20 +1,29 @@
 package Tetris.logic;
 
+import Tetris.Interface.OverPane;
 import Tetris.Main;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.Pane;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.File;
@@ -28,16 +37,17 @@ import java.util.function.Consumer;
 
 public class GamePane {
 
-    private static final int BLOCK_SIZE = 40;
+    public static final int BLOCK_SIZE = 40;
     private static final int GRID_WIDTH = 15;
     private static final int GRID_HEIGHT = 20;
     private static final int width = Main.getWidth();
     private static final int height = Main.getHeight();
     private static final double dFps = 0.2;
-
-    private final double fps = 0.5;
     private static int countSeconds = 0;
 
+    private int score = 0;
+    private Label scoreLabel = new Label("SCORE: 0");
+    /** Draw. */
     private GraphicsContext g;
     /** Matrix. */
     private int[][] grid = new int[GRID_WIDTH][GRID_HEIGHT];
@@ -46,35 +56,37 @@ public class GamePane {
     /** Copied originals */
     private List<Shape> shapes = new ArrayList<>();
     /** Timeline. */
-    private Timeline timeline;
+    private Timeline timeline = new Timeline();
     /** Current shape. */
     private Shape currentShape;
 
+    private Pane pane;
 
-    private Parent createContent() {
-        Pane pane = new Pane();
+    private void createContent() {
+        pane = new Pane();
         pane.setPrefSize(width, height);
 
         Canvas canvas = new Canvas(GRID_WIDTH * BLOCK_SIZE, GRID_HEIGHT * BLOCK_SIZE);
         g = canvas.getGraphicsContext2D();
-        g.setStroke(Color.BLACK);
+        pane.getChildren().add(canvas);
 
-        pane.getChildren().addAll(canvas);
         createLShape();
         createSShape();
         createRestShapes();
 
         show();
-        setPanePrefs(pane);
-        return pane;
+        setPanePrefs();
     }
 
-    private void setPanePrefs(Pane pane) {
+    private void setPanePrefs() {
         Color color = readFromFile();
         BackgroundFill background  = new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY);
         pane.setBackground(new Background(background));
-        pane.getChildren().addAll(drawLeftBorder(color), drawRightBorder(color));
-        pane.requestFocus();
+        scoreLabel.setFont(Font.font("System", 25));
+        scoreLabel.setTextFill(readFromFile() == Color.WHITE ? Color.BLACK : Color.WHITE);
+        scoreLabel.setTranslateX(30);
+        scoreLabel.setTranslateY(40);
+        pane.getChildren().addAll(drawLeftBorder(color), drawRightBorder(color), scoreLabel);
     }
 
     private Rectangle drawLeftBorder(Color color) {
@@ -290,21 +302,28 @@ public class GamePane {
                             p.y++;
                             placePiece(p);
                         })));
-        System.out.println(rows.size());
+        if (rows.size() > 0) {
+            scoreLabel.setText("SCORE: " + (score += calculateBonus(rows.size())));
+        }
         show();
+    }
+
+    private int calculateBonus(int rowsDispatch) {
+        int bonus = rowsDispatch >= 4 ? 10 : rowsDispatch > 2 ? 5 : 0;
+        return rowsDispatch * 5 + bonus;
     }
 
     private List<Integer> collectRows() {
         // List of rows to remove
         List<Integer> rows = new ArrayList<>();
 
-        // Represents main loop
-        mainLoop:
+        // Label
+        outer:
         for (int y = 0; y < GRID_HEIGHT; y++) {
             for (int x = 5; x < GRID_WIDTH; x++) {
                 if (grid[x][y] != 1) {
-                    // Continues the main loop without adding y to the rows.
-                    continue mainLoop;
+                    // Continues the main loop without adding y to the rows
+                    continue outer;
                 }
             }
             // The row we need to remove
@@ -324,11 +343,38 @@ public class GamePane {
     }
 
     public Scene startGame() {
-        Scene scene = new Scene(createContent());
-        timeline = new Timeline(new KeyFrame(Duration.seconds(fps), ev -> {
+        OverPane over = new OverPane();
 
-        scene.setOnKeyPressed(e -> {
-            switch (e.getCode()) {
+        createContent();
+        Scene scene = new Scene(pane);
+        movementController(scene);
+            KeyFrame keyFrame = new KeyFrame(Duration.seconds(0.5), ev -> {
+                if (!isValidState()) {
+                    timeline.stop();
+                    OverPane.dumpScoresToFile(score);
+                    gameOverAction(over);
+                }
+
+                if (countSeconds != 0 && countSeconds % Duration.minutes(1).toSeconds() == 0
+                        && timeline.getStatus() != Animation.Status.PAUSED) {
+                    System.out.println("Incremented!");
+                    timeline.setRate(timeline.getRate() + dFps);
+                    scoreLabel.setText("SCORE: " + (score += 5));
+                }
+                countSeconds++;
+                update();
+                reDraw();
+            });
+
+            timeline.getKeyFrames().add(keyFrame);
+            timeline.setCycleCount(Timeline.INDEFINITE);
+            timeline.play();
+        return scene;
+    }
+
+    private void movementController(Scene scene) {
+        scene.setOnKeyPressed(ev -> {
+            switch (ev.getCode()) {
                 case UP: moveShape(p -> p.rotate(), p -> p.rotateBack(), false);
                     break;
                 case LEFT: moveShape(p -> p.move(Direction.LEFT), p -> p.move(Direction.RIGHT), false);
@@ -337,45 +383,102 @@ public class GamePane {
                     break;
                 case DOWN: moveShape(p -> p.move(Direction.DOWN), p -> p.move(Direction.UP), true);
                     break;
-                case SPACE:
+                case P:
                     if (timeline.getStatus() == Animation.Status.RUNNING) {
                         timeline.pause();
+                        pauseAction();
+
                     } else {
+                        for (Node node : pane.getChildren()) {
+                            if (node instanceof GridPane) {
+                                pane.getChildren().remove(node);
+                                break;
+                            }
+                        }
                         timeline.play();
                     }
                     break;
-
             }
             reDraw();
         });
-            update();
-            reDraw();
-            if (!isValidState()) {
-                System.exit(1);
-            }
-            if (countSeconds != 0 && countSeconds % Duration.minutes(1).toSeconds() == 0) {
-                System.out.println("Incremented!");
-                timeline.setRate(timeline.getRate() + dFps);
-            }
-            countSeconds++;
-        }));
 
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.play();
+    }
+    private void gameOverAction(OverPane over) {
+        Main m = new Main();
+        over.getExit().setOnMouseClicked(ev -> System.exit(1));
+        over.getStartOver().setOnMouseClicked(ev -> {
+            Main.stage.close();
+            m.start(new Stage());
+        });
+        Main.stage.setScene(new Scene(over));
+        Main.current.getMediaPlayer().stop();
+        Main.current.setMediaPlayer(new MediaPlayer(new Media(
+                new File(Main.mediaPath + "Over.mp3").toURI().toString())));
+        Main.current.getMediaPlayer().play();
+    }
 
-        return scene;
+    private void pauseAction() {
+        Label label = new Label("Press Space to continue!");
+        MediaPlayer player = Main.current.getMediaPlayer();
+        label.setFont(Font.font("System", 24));
+        label.setTextFill(Color.WHITE);
+        label.setAlignment(Pos.CENTER);
+        GridPane pane = new GridPane();
+        pane.setAlignment(Pos.CENTER);
+        pane.setVgap(35);
+        Main m = new Main();
+        pane.setBackground(new Background(new BackgroundFill(Color.DARKRED, CornerRadii.EMPTY, Insets.EMPTY)));
+        pane.setOpacity(0.65);
+        pane.setPrefWidth(300);
+        pane.setPrefHeight(400);
+        pane.setTranslateX(250);
+        pane.setTranslateY(150);
+
+        Button music = new Button();
+        music.setText(player.getStatus() == MediaPlayer.Status.STOPPED ? "Music on" : "Music off");
+        music.setOnMouseClicked(ev -> {
+            if (player.getStatus() == MediaPlayer.Status.STOPPED) {
+                music.setText("Music off");
+                player.play();
+            } else {
+                music.setText("Music on");
+                player.stop();
+            }
+        });
+        Button backToMenu = new Button("Back to menu");
+        backToMenu.setOnMouseClicked(ev -> {
+            Main.stage.close();
+            m.start(new Stage());
+        });
+        setButtonStyle(music, backToMenu);
+        pane.add(music, 1, 1);
+        pane.add(backToMenu, 1, 2);
+        pane.add(label, 1, 0);
+        this.pane.getChildren().add(pane);
+        pane.setOnKeyPressed(ev -> {
+            if (ev.getCode() == KeyCode.P) {
+                return;
+            }
+        });
+        pane.requestFocus();
+    }
+
+    private void setButtonStyle(Button... buttons) {
+        for (Button b : buttons) {
+            b.setPrefWidth(125);
+            b.setPrefHeight(40);
+            b.setStyle("-fx-base: crimson");
+            b.setFont(Font.font("System", 16));
+            GridPane.setHalignment(b, HPos.CENTER);
+        }
     }
 }
 
 // TODO:
 /* Decide about borders - they do not match the grid at this point; */ /** Done! */
-/* Problem with music; */ /** Somehow Solved! */
-
-/* Implement score count and stages */ /**Half way there */
-
-// Set stroke for graphic context;
-// Set game over screen appearance;
-// Add music & animations
-// Pause
-
+/* Problem with music; */ /** Solved! */
+/* Implement score count and stages */ /** Done! */
+/* Pause */ /** Done */
+/* Set game over screen appearance and new game start; */ /** Done */
+/* Set stroke for graphic context; */ /** Done! */
 

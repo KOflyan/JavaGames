@@ -5,6 +5,8 @@ import Tetris.Interface.ScoresPane;
 import Tetris.Interface.SettingsPane;
 import Tetris.Interface.StartPane;
 import Tetris.logic.GamePane;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.RadioButton;
@@ -13,6 +15,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,12 +32,14 @@ public class Main extends Application {
     private static final int height = 800;
     /** Background image */
     private Image backgroundImage;
-    /** Game over image */
-    private Image overImage;
     /** Names of tracks. Array. */
     private String[] tracks = {"Troika.mp3", "Loginska.mp3", "Karinka.mp3"};
     /** Current media player */
-    private static MediaView current = new MediaView();
+    public static MediaView current = new MediaView();
+
+    public static String mediaPath = "Games/src/Tetris/music/";
+
+    public static Stage stage;
 
     /**
      * Main method.
@@ -42,18 +47,17 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
+        Main.stage = primaryStage;
         setImages();
-        panesOnAction(new StartPane(backgroundImage), new SettingsPane(backgroundImage), new OverPane(overImage),
-                new ScoresPane(backgroundImage), primaryStage);
+        panesOnAction(new StartPane(backgroundImage), new SettingsPane(backgroundImage), new OverPane(),
+                new ScoresPane());
         //primaryStage.setResizable(false);
-        primaryStage.show();
+        stage.show();
     }
 
     /** Define background images */
     private void setImages() {
         backgroundImage = new Image(getClass().getResourceAsStream("Interface/love.jpg"),
-                width, height, false, true);
-        overImage = new Image(getClass().getResourceAsStream("Interface/loveOver.jpg"),
                 width, height, false, true);
     }
 
@@ -63,25 +67,23 @@ public class Main extends Application {
      * @param settingsPane Settings Pane
      * @param overPane Over Pane
      * @param scoresPane Scores Pane
-     * @param primaryStage Stage
      */
     private void panesOnAction(StartPane startPane, SettingsPane settingsPane,
-                               OverPane overPane, ScoresPane scoresPane, Stage primaryStage){
+                               OverPane overPane, ScoresPane scoresPane){
         Scene startScene = new Scene(startPane);
         Scene settingsScene = new Scene(settingsPane);
         Scene overScene = new Scene(overPane);
         Scene scoresScene = new Scene(scoresPane);
         // Setting default scene
-        primaryStage.setScene(startScene);
+        stage.setScene(startScene);
         // Switching between scenes
         startPane.getExit().setOnMouseClicked(ev -> System.exit(1));
-        startPane.getScores().setOnMouseClicked(ev -> primaryStage.setScene(scoresScene));
-        startPane.getStart().setOnMouseClicked(ev -> game(primaryStage));
-        startPane.getSettings().setOnMouseClicked(ev -> primaryStage.setScene(settingsScene));
-        settingsPane.getBack().setOnMouseClicked(ev -> primaryStage.setScene(startScene));
-        scoresPane.getBack().setOnMouseClicked(ev -> primaryStage.setScene(startScene));
-        overPane.getExit().setOnMouseClicked(ev -> System.exit(1));
-        overPane.getStartOver().setOnMouseClicked(ev -> primaryStage.setScene(startScene));
+        startPane.getScores().setOnMouseClicked(ev -> stage.setScene(scoresScene));
+        startPane.getStart().setOnMouseClicked(ev -> game(stage));
+        startPane.getSettings().setOnMouseClicked(ev -> stage.setScene(settingsScene));
+        settingsPane.getBack().setOnMouseClicked(ev -> stage.setScene(startScene));
+        scoresPane.getBack().setOnMouseClicked(ev -> stage.setScene(startScene));
+
         settingsAction(settingsPane);
     }
 
@@ -138,7 +140,7 @@ public class Main extends Application {
     }
 
     private void mediaPlay(int index) {
-        String mediaPath = "Games/src/Tetris/music/";
+
         if (current == null) {
             return;
         }
