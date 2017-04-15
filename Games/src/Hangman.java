@@ -17,28 +17,22 @@ public class Hangman {
         IS_HARD = true;
     }
     private static void SetDifficulty(){
-        String[] mode;
+        String[] mode = IS_HARD ? HARD : EASY;
         Random rand = new Random();
-        if (IS_HARD) mode = HARD;
-        else mode = EASY;
-
         int RandInd = rand.nextInt(mode.length);
         WORD = mode[RandInd];
         GUESS = WORD.length();
     }
     private static char[] CreateCharArray(){
-        char[] chars = new char[WORD.length()];
-        for (int i = 0; i < WORD.length(); i++){
-            chars[i] = WORD.charAt(i);
-        }
-        return chars;
+        return WORD.toCharArray();
     }
+
     private static String GuessWord(char[] word){
-        String text = "";
+        StringBuilder text = new StringBuilder();
         for (char e : word){
-            text += e;
+            text.append(e);
         }
-        return text;
+        return text.toString();
     }
     private static void DifficultySelect(){
         String difficulty;
@@ -53,7 +47,9 @@ public class Hangman {
                 break;
             }
             else if (difficulty.equals("e")){
-                if (IS_HARD) IS_HARD = false;
+                if (IS_HARD) {
+                    IS_HARD = false;
+                }
                 SetDifficulty();
                 break;
             }
