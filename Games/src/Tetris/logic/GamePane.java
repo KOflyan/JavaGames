@@ -35,6 +35,8 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.function.Consumer;
 
+import static Tetris.Main.current;
+
 /** Game panel. */
 public class GamePane {
     /** Size of one block. */
@@ -425,6 +427,9 @@ public class GamePane {
      */
     private void movementController(Scene scene) {
         scene.setOnKeyPressed(ev -> {
+            if (timeline.getStatus() == Animation.Status.PAUSED && ev.getCode() != KeyCode.P) {
+                return;
+            }
             switch (ev.getCode()) {
                 case UP: moveShape(p -> p.rotate(), p -> p.rotateBack(), false);
                     break;
@@ -467,52 +472,42 @@ public class GamePane {
             m.start(new Stage());
         });
         Main.stage.setScene(new Scene(over));
-        if (Main.current.getMediaPlayer() != null) {
-            Main.current.getMediaPlayer().stop();
+        if (current != null && current.getMediaPlayer() != null) {
+            current.getMediaPlayer().stop();
 
-            Main.current.setMediaPlayer(new MediaPlayer(new Media(
+            current.setMediaPlayer(new MediaPlayer(new Media(
                     new File(Main.mediaPath + "Over.mp3").toURI().toString())));
-            Main.current.getMediaPlayer().play();
+            current.getMediaPlayer().play();
         }
     }
 
     /** Action on pause. */
     private void pauseAction() {
+        Main m = new Main();
         Label label = new Label("Press P to continue!");
-        MediaPlayer player = Main.current.getMediaPlayer();
         label.setFont(Font.font("System", 24));
         label.setTextFill(Color.WHITE);
         label.setAlignment(Pos.CENTER);
         GridPane pane = new GridPane();
         pane.setAlignment(Pos.CENTER);
         pane.setVgap(25);
-        Main m = new Main();
         pane.setBackground(new Background(new BackgroundFill(Color.DARKRED, CornerRadii.EMPTY, Insets.EMPTY)));
-        pane.setOpacity(0.65);
+        pane.setOpacity(0.75);
         pane.setPrefWidth(300);
         pane.setPrefHeight(400);
         pane.setTranslateX(250);
         pane.setTranslateY(150);
 
         Button music = new Button();
-        music.setText(player.getStatus() == MediaPlayer.Status.STOPPED ? "Music on" : "Music off");
-        music.setOnMouseClicked(ev -> {
-            if (player.getStatus() == MediaPlayer.Status.STOPPED) {
-                music.setText("Music off");
-                player.play();
-
-            } else {
-                music.setText("Music on");
-                player.stop();
-            }
-        });
         Button backToMenu = new Button("Back to menu");
         backToMenu.setOnMouseClicked(ev -> {
             Main.stage.close();
             m.start(new Stage());
         });
+
+        mouseClickAction(pane, music);
         setButtonStyle(music, backToMenu);
-        changeMusicAction(pane);
+
         pane.add(music, 1, 2);
         pane.add(backToMenu, 1, 4);
         pane.add(label, 1, 0);
@@ -521,22 +516,46 @@ public class GamePane {
         pane.requestFocus();
     }
 
+    private void mouseClickAction(GridPane pane, Button music) {
+        music.setText(current == null || current.getMediaPlayer().getStatus() == MediaPlayer.Status.STOPPED ? "Music on" : "Music off");
+        music.setOnMouseClicked(ev -> {
+            if (current == null || current.getMediaPlayer() == null || current.getMediaPlayer().getStatus() == MediaPlayer.Status.STOPPED) {
+                current = new MediaView();
+                current.setMediaPlayer(new MediaPlayer(new Media(new File(Main.mediaPath + "Troika.mp3").toURI().toString())));
+                current.getMediaPlayer().setCycleCount(MediaPlayer.INDEFINITE);
+                music.setText("Music off");
+                current.getMediaPlayer().play();
+
+            }
+            if (current.getMediaPlayer().getStatus() == MediaPlayer.Status.PLAYING){
+                music.setText("Music on");
+                current.getMediaPlayer().stop();
+            }
+        });
+
+        changeMusicAction(pane);
+    }
+
+    /** Change music. */
     private void changeMusicAction(GridPane pane) {
         Button changeMusic = new Button("Change music");
         pane.add(changeMusic, 1,3);
-        MediaView current = Main.current;
+        setButtonStyle(changeMusic);
+
         changeMusic.setOnMouseClicked(ev -> {
-            if (current.getMediaPlayer().getStatus() == MediaPlayer.Status.PLAYING) {
-                Main.current.getMediaPlayer().stop();
+            if (current != null && current.getMediaPlayer() != null && current.getMediaPlayer().getStatus() == MediaPlayer.Status.PLAYING) {
+                current.getMediaPlayer().stop();
                 current.setMediaPlayer(new MediaPlayer(new Media(
                         new File(Main.mediaPath + getPath(current)).toURI().toString())));
                 current.getMediaPlayer().setCycleCount(MediaPlayer.INDEFINITE);
-                Main.current = current;
-                Main.current.getMediaPlayer().play();
+                current.getMediaPlayer().play();
             }
         });
-        setButtonStyle(changeMusic);
     }
+
+
+
+    /** Get path to new track. */
     private String getPath(MediaView m) {
         String[] filePath = m.getMediaPlayer().getMedia().getSource().split("/");
         switch (filePath[filePath.length - 1]) {
@@ -544,14 +563,11 @@ public class GamePane {
                 return "Loginska.mp3";
             case "Loginska.mp3" :
                 return "Karinka.mp3";
-            case "Karinka.mp3" :
-                return "Troika.mp3";
         }
-        return null;
+        return "Troika.mp3";
     }
 
     /** Just style, yo.
-     *
      * @param buttons array
      */
     private void setButtonStyle(Button... buttons) {

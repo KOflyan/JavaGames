@@ -116,14 +116,22 @@ public class SettingsPane extends GridPane {
         musicOnOff.setTranslateY(-350);
         musicOnOff.setSelected(true);
         musicOnOff.setTextFill(Color.WHITE);
+        musicOnOff.setStyle("-fx-base: black");
         setRadio();
         setButtonStyle(back);
+        setRadioButtonStyle(troika, karinka, loginska);
     }
 
     private void setButtonStyle(Button... buttons) {
         for (Button b : buttons) {
             b.setStyle("-fx-border-color: white; -fx-base: black;");
             b.setTextFill(Color.WHITE);
+        }
+    }
+
+    private void setRadioButtonStyle(RadioButton... buttons) {
+        for (RadioButton rb : buttons) {
+            rb.setStyle("-fx-base: black");
         }
     }
 
