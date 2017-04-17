@@ -201,6 +201,9 @@ public class CookieController {
             ImageView cookie = new ImageView(new Image(getClass().getResourceAsStream("images/cookie.png")));
             cookie.setLayoutX(generateRandom(25, 210));
             cookie.setLayoutY(generateRandom(50, 260));
+            cookie.setOnMouseClicked(ev -> clickAction());
+            cookie.setOnMousePressed(ev -> changeCookie());
+            cookie.setOnMouseReleased(ev -> changeCookieBack());
             CookieFX.addImageView(cookie);
             double dx = cookie.getLayoutX() > 100 ? 2 : -2;
             double dy = cookie.getLayoutY() > 145 ? 2 : -2;
