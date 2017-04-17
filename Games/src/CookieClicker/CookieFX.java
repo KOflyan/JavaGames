@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 
 
 public class CookieFX extends Application {
-    public static Pane current;
+    private static Pane current;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -22,7 +22,7 @@ public class CookieFX extends Application {
         //pane.setOnMouseClicked(ev -> System.out.println(ev.getX() + " " + ev.getY()));
     }
 
-    public static void addImageView(ImageView imageView) {
+    static void addImageView(ImageView imageView) {
         imageView.setScaleX(0.2);
         imageView.setScaleY(0.2);
         imageView.setOpacity(1);

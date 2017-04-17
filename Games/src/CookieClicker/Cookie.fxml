@@ -17,11 +17,11 @@
       </ImageView>
       <Pane layoutX="459.0" layoutY="78.0" prefHeight="445.0" prefWidth="297.0" style="-fx-border-color: Grey; -fx-border-width: 5;">
          <children>
-            <Button fx:id="buyCursor" layoutX="99.0" layoutY="157.0" mnemonicParsing="false" onAction="#setBuyCursor" onMouseEntered="#changeCursorStyle" onMouseExited="#changeCursorBack" prefHeight="39.0" prefWidth="131.0" style="-fx-background-color: Grey;" text="Buy cursor" textFill="WHITE">
+            <Button fx:id="buyCursor" layoutX="99.0" layoutY="157.0" mnemonicParsing="false" onAction="#setBuyCursor" prefHeight="39.0" prefWidth="131.0" style="-fx-base: Black; -fx-border-color: White;" text="Buy cursor" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font></Button>
-            <Button fx:id="buyClicker" layoutX="99.0" layoutY="257.0" mnemonicParsing="false" onAction="#setBuyClicker" onMouseEntered="#changeClickerStyle" onMouseExited="#changeClickerBack" prefHeight="39.0" prefWidth="131.0" style="-fx-background-color: Grey;" text="Buy clicker" textFill="WHITE">
+            <Button fx:id="buyClicker" layoutX="99.0" layoutY="257.0" mnemonicParsing="false" onAction="#setBuyClicker" prefHeight="39.0" prefWidth="131.0" style="-fx-base: Black; -fx-border-color: white;" text="Buy clicker" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font></Button>
@@ -59,7 +59,7 @@
                <font>
                   <Font size="18.0" />
                </font></Label>
-            <Button fx:id="info" layoutX="175.0" layoutY="371.0" mnemonicParsing="false" onAction="#infoAction" onMouseEntered="#changeInfoStyle" onMouseExited="#changeInfoBack" prefHeight="39.0" prefWidth="91.0" style="-fx-background-color: Grey;" text="Info" textFill="WHITE">
+            <Button fx:id="info" layoutX="175.0" layoutY="371.0" mnemonicParsing="false" onAction="#infoAction" prefHeight="39.0" prefWidth="91.0" style="-fx-base: Black; -fx-border-color: white;" text="Info" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font></Button>
@@ -85,7 +85,7 @@
          <font>
             <Font size="36.0" />
          </font></Label>
-      <Button fx:id="fun" layoutX="120.0" layoutY="504.0" mnemonicParsing="false" onAction="#setFun" onMouseEntered="#changeSummonStyle" onMouseExited="#changeSummonBack" prefHeight="39.0" prefWidth="233.0" style="-fx-background-color: Grey;" text="&gt;Summon Cookie Eater&lt;" textFill="WHITE">
+      <Button fx:id="fun" layoutX="120.0" layoutY="504.0" mnemonicParsing="false" onAction="#setFun" prefHeight="39.0" prefWidth="233.0" style="-fx-base: Black; -fx-border-color: white;" text="&gt;Summon Cookie Eater&lt;" textFill="WHITE">
          <font>
             <Font size="18.0" />
          </font></Button>
@@ -105,7 +105,7 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <Button fx:id="ok" layoutX="447.0" layoutY="164.0" mnemonicParsing="false" onAction="#infoClose" onMouseEntered="#changeOkStyle" onMouseExited="#changeOkBack" prefHeight="31.0" prefWidth="91.0" style="-fx-background-color: grey;" text="Got it!" textFill="WHITE">
+            <Button fx:id="ok" layoutX="447.0" layoutY="164.0" mnemonicParsing="false" onAction="#infoClose" prefHeight="31.0" prefWidth="91.0" style="-fx-base: black; -fx-border-color: white;" text="Got it!" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font>
