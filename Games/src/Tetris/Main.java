@@ -1,12 +1,9 @@
 package Tetris;
 
-import Tetris.Interface.OverPane;
 import Tetris.Interface.ScoresPane;
 import Tetris.Interface.SettingsPane;
 import Tetris.Interface.StartPane;
 import Tetris.logic.GamePane;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.RadioButton;
@@ -15,8 +12,6 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,7 +34,7 @@ public class Main extends Application {
 
     public static String mediaPath = "Games/src/Tetris/music/";
 
-    public static Stage stage;
+    public static Stage stage = new Stage();
 
     /**
      * Main method.
@@ -48,11 +43,13 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         Main.stage = primaryStage;
+        //stage.setWidth(width);
+        //stage.setHeight(height);
         setImages();
-        panesOnAction(new StartPane(backgroundImage), new SettingsPane(backgroundImage), new OverPane(),
-                new ScoresPane());
-        //primaryStage.setResizable(false);
+        panesOnAction(new StartPane(backgroundImage), new SettingsPane(backgroundImage), new ScoresPane());
+        //stage.setResizable(false);
         stage.show();
+
     }
 
     /** Define background images */
@@ -65,14 +62,11 @@ public class Main extends Application {
      * Define panes' action events (mostly transitions).
      * @param startPane Start Pane
      * @param settingsPane Settings Pane
-     * @param overPane Over Pane
      * @param scoresPane Scores Pane
      */
-    private void panesOnAction(StartPane startPane, SettingsPane settingsPane,
-                               OverPane overPane, ScoresPane scoresPane){
+    private void panesOnAction(StartPane startPane, SettingsPane settingsPane, ScoresPane scoresPane){
         Scene startScene = new Scene(startPane);
         Scene settingsScene = new Scene(settingsPane);
-        Scene overScene = new Scene(overPane);
         Scene scoresScene = new Scene(scoresPane);
         // Setting default scene
         stage.setScene(startScene);
@@ -92,6 +86,7 @@ public class Main extends Application {
      * @param settingsPane Settings Pane
      */
     private void settingsAction(SettingsPane settingsPane) {
+
         settingsPane.getMusicBox().setOnAction(ev -> {
             if (settingsPane.getMusicBox().isSelected()) {
                 current = new MediaView();

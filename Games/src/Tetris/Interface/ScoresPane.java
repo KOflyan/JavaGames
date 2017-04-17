@@ -14,10 +14,7 @@ import javafx.scene.text.Font;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 /** Game Scores screen. */
 public class ScoresPane extends Pane {
@@ -29,7 +26,9 @@ public class ScoresPane extends Pane {
         setPanePrefs(Main.getWidth(), Main.getHeight());
         back.setPrefSize(130, 40);
         back.setTranslateX(25);
-        back.setTranslateY(700);
+        back.setTranslateY(685);
+        back.setStyle("-fx-border-color: white; -fx-base: black;");
+        back.setTextFill(Color.WHITE);
         getChildren().add(back);
         addScores();
     }
@@ -47,7 +46,7 @@ public class ScoresPane extends Pane {
 
     /** Get scores from the file. */
     private List<Integer> getScores() {
-        List<Integer> scores = new ArrayList<>();
+        Set<Integer> scores = new HashSet<>();
         try {
             File file = new File("Games/src/Tetris/resc/Scores.txt");
             Scanner read = new Scanner(file);
@@ -61,13 +60,18 @@ public class ScoresPane extends Pane {
         return separateBest(scores);
     }
 
-    /** Separate the best 10 scores. */
-    private List<Integer> separateBest(List<Integer> scores) {
-        scores.sort(Collections.reverseOrder());
-        if (scores.size() >= 10) {
-            return scores.subList(0, 10);
+    /** Separate the best 10 scores.
+     *
+     * @param scores Set
+     * @return list
+     */
+    private List<Integer> separateBest(Set<Integer> scores) {
+        List<Integer> scoresList = new ArrayList<>(scores);
+        scoresList.sort(Collections.reverseOrder());
+        if (scoresList.size() >= 10) {
+            return scoresList.subList(0, 10);
         }
-        return scores;
+        return scoresList;
     }
 
     /** Add scores to the pane. */
@@ -113,10 +117,14 @@ public class ScoresPane extends Pane {
         getChildren().add(v);
     }
 
+    /**
+     * Set style.
+     * @param label label
+     * @param fontSize font size
+     */
     private void setLabelStyle(Label label, int fontSize) {
         label.setTextFill(Color.WHITE);
         label.setFont(Font.font("System", fontSize));
-
     }
 
     /**

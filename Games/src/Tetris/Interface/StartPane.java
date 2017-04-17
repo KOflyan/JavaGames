@@ -6,6 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 
 /**
  * Game Start screen.
@@ -36,10 +37,10 @@ public class StartPane extends GridPane {
      */
     private void setPanePrefs(int width, int height, Image image) {
         setPrefSize(width, height);
+        setBackground(image);
         setAlignment(Pos.BOTTOM_RIGHT);
         setVgap(15);
         setPadding(new Insets(70, 40, 70, 40));
-        setBackground(image);
     }
 
     /**
@@ -59,6 +60,14 @@ public class StartPane extends GridPane {
         scores.setPrefSize(130, 40);
         exit.setPrefSize(130, 40);
         settings.setPrefSize(130, 40);
+        setButtonStyle(start, scores, exit, settings);
+    }
+
+    private void setButtonStyle(Button... buttons) {
+        for (Button b : buttons) {
+            b.setStyle("-fx-border-color: white; -fx-base: black;");
+            b.setTextFill(Color.WHITE);
+        }
     }
 
     /**

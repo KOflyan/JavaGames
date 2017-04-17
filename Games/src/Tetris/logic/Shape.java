@@ -90,10 +90,6 @@ public class Shape {
         return y;
     }
 
-    public Color getColor() {
-        return color;
-    }
-
     public List<Piece> getPieces() {
         return pieces;
     }

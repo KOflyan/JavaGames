@@ -117,6 +117,14 @@ public class SettingsPane extends GridPane {
         musicOnOff.setSelected(true);
         musicOnOff.setTextFill(Color.WHITE);
         setRadio();
+        setButtonStyle(back);
+    }
+
+    private void setButtonStyle(Button... buttons) {
+        for (Button b : buttons) {
+            b.setStyle("-fx-border-color: white; -fx-base: black;");
+            b.setTextFill(Color.WHITE);
+        }
     }
 
     /** Set radio buttons */

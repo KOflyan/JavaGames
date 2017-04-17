@@ -76,6 +76,14 @@ public class OverPane extends StackPane {
         exit.setTranslateX(220);
         startOver.setTranslateY(-130);
         exit.setTranslateY(-130);
+        setButtonStyle(exit, startOver);
+    }
+
+    private void setButtonStyle(Button... buttons) {
+        for (Button b : buttons) {
+            b.setStyle("-fx-border-color: white; -fx-base: black;");
+            b.setTextFill(Color.WHITE);
+        }
     }
 
     /**
@@ -94,7 +102,14 @@ public class OverPane extends StackPane {
         return exit;
     }
 
+    /** Append to file.
+     *
+     * @param score score
+     */
     public static void dumpScoresToFile(int score) {
+        if (score == 0) {
+            return;
+        }
         String toWrite = score + "\n";
         try {
             File file = new File("Games/src/Tetris/resc/Scores.txt");
