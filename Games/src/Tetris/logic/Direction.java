@@ -1,6 +1,8 @@
 package Tetris.logic;
 
-/** Enum class. */
+/**
+ * Enum class.
+ */
 public enum Direction {
     // Direction of the movement corresponding to the piece in center
     UP(0, -1),
@@ -10,7 +12,9 @@ public enum Direction {
 
     private int x, y;
 
-    /** Const. */
+    /**
+     * Const.
+     */
     Direction(int x, int y) {
         this.x = x;
         this.y = y;
@@ -18,6 +22,7 @@ public enum Direction {
 
     /**
      * Previous direction comparing to the current.
+     *
      * @return previous direction obj
      */
     public Direction previousDirection() {
@@ -33,6 +38,7 @@ public enum Direction {
 
     /**
      * Next direction comparing to the current.
+     *
      * @return next direction obj
      */
     public Direction nextDirection() {
@@ -46,13 +52,16 @@ public enum Direction {
 
     /**
      * Getter.
+     *
      * @return x
      */
     public int getX() {
         return x;
     }
+
     /**
      * Getter.
+     *
      * @return y
      */
     public int getY() {

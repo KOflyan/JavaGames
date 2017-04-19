@@ -37,42 +37,78 @@ import java.util.function.Consumer;
 
 import static Tetris.Main.current;
 
-/** Game panel. */
+/**
+ * Game panel.
+ */
 public class GamePane {
-    /** Size of one block. */
+    /**
+     * Size of one block.
+     */
     public static final int BLOCK_SIZE = 40;
-    /** Matrix first array size. */
+    /**
+     * Matrix first array size.
+     */
     private static final int GRID_WIDTH = 15;
-    /** Matrix second array size. */
+    /**
+     * Matrix second array size.
+     */
     private static final int GRID_HEIGHT = 20;
-    /** Obvious. */
+    /**
+     * Obvious.
+     */
     private static final int width = Main.getWidth();
-    /** Obvious. */
+    /**
+     * Obvious.
+     */
     private static final int height = Main.getHeight();
-    /** Increase fps by... */
+    /**
+     * Increase fps by...
+     */
     private static final double dFps = 0.2;
-    /** Measure the time of animation running. */
+    /**
+     * Measure the time of animation running.
+     */
     private static int countSeconds = 0;
-    /** Score. */
+    /**
+     * Score.
+     */
     private int score = 0;
-    /**Score label. */
+    /**
+     * Score label.
+     */
     private Label scoreLabel = new Label("SCORE: 0");
-    /** Draw. */
+    /**
+     * Draw.
+     */
     private GraphicsContext g;
-    /** Matrix. */
+    /**
+     * Matrix.
+     */
     private int[][] grid = new int[GRID_WIDTH][GRID_HEIGHT];
-    /** Original pieces */
+    /**
+     * Original pieces
+     */
     private List<Shape> originalShapes = new ArrayList<>();
-    /** Copied originals */
+    /**
+     * Copied originals
+     */
     private List<Shape> shapes = new ArrayList<>();
-    /** Timeline. */
+    /**
+     * Timeline.
+     */
     private Timeline timeline = new Timeline();
-    /** Current shape. */
+    /**
+     * Current shape.
+     */
     private Shape currentShape;
-    /** Pane. */
+    /**
+     * Pane.
+     */
     private Pane pane;
 
-    /** Set pane and initial things. */
+    /**
+     * Set pane and initial things.
+     */
     private void createContent() {
         pane = new Pane();
         pane.setPrefSize(width, height);
@@ -89,10 +125,12 @@ public class GamePane {
         setPanePrefs();
     }
 
-    /** Pane settings. */
+    /**
+     * Pane prefs.
+     */
     private void setPanePrefs() {
         Color color = readFromFile();
-        BackgroundFill background  = new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY);
+        BackgroundFill background = new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY);
         pane.setBackground(new Background(background));
         scoreLabel.setFont(Font.font("System", 25));
         scoreLabel.setTextFill(readFromFile() == Color.WHITE ? Color.BLACK : Color.WHITE);
@@ -103,6 +141,7 @@ public class GamePane {
 
     /**
      * Draw left border.
+     *
      * @param color color
      * @return rect
      */
@@ -122,6 +161,7 @@ public class GamePane {
 
     /**
      * Draw right border.
+     *
      * @param color color
      * @return rect
      */
@@ -138,7 +178,9 @@ public class GamePane {
         return rectRight;
     }
 
-    /** Read color from file. */
+    /**
+     * Read color from file.
+     */
     private Color readFromFile() {
         String color = "";
         Color defaultColor = Color.DARKBLUE;
@@ -167,7 +209,9 @@ public class GamePane {
         return defaultColor;
     }
 
-    /** L. */
+    /**
+     * L.
+     */
     private void createLShape() {
         // L
         originalShapes.add(new Shape(Color.AQUAMARINE,
@@ -185,7 +229,9 @@ public class GamePane {
         ));
     }
 
-    /** S. */
+    /**
+     * S.
+     */
     private void createSShape() {
         // S
         originalShapes.add(new Shape(Color.ORANGE,
@@ -202,7 +248,9 @@ public class GamePane {
         ));
     }
 
-    /** Line, T, Cube. */
+    /**
+     * Line, T, Cube.
+     */
     private void createRestShapes() {
         // Line
         originalShapes.add(new Shape(Color.DARKBLUE,
@@ -226,12 +274,16 @@ public class GamePane {
                 new Piece(1, Direction.DOWN)));
     }
 
-    /** Fall update. */
+    /**
+     * Fall update.
+     */
     private void update() {
         moveShape(p -> p.move(Direction.DOWN), p -> p.move(Direction.UP), true);
     }
 
-    /** Update when moves by key. */
+    /**
+     * Update when moves by key.
+     */
     private void reDraw() {
         g.clearRect(0, 0, GRID_WIDTH * BLOCK_SIZE, GRID_HEIGHT * BLOCK_SIZE);
 
@@ -240,6 +292,7 @@ public class GamePane {
 
     /**
      * Place.
+     *
      * @param piece piece
      */
     private void placePiece(Piece piece) {
@@ -248,6 +301,7 @@ public class GamePane {
 
     /**
      * Remove piece.
+     *
      * @param piece piece
      */
     private void removePiece(Piece piece) {
@@ -256,6 +310,7 @@ public class GamePane {
 
     /**
      * Check if in bounds.
+     *
      * @param piece piece
      * @return bool
      */
@@ -266,7 +321,8 @@ public class GamePane {
 
     /**
      * Make a move.
-     * @param isOk if possible
+     *
+     * @param isOk    if possible
      * @param isNotOk if not
      * @param endMove end move
      */
@@ -302,7 +358,9 @@ public class GamePane {
         }
     }
 
-    /** Check if game over. */
+    /**
+     * Check if game over.
+     */
     private boolean isValidState() {
         for (int y = 0; y < GRID_HEIGHT; y++) {
             for (int x = 5; x < GRID_WIDTH; x++) {
@@ -314,7 +372,9 @@ public class GamePane {
         return true;
     }
 
-    /** Remove the row. */
+    /**
+     * Remove the row.
+     */
     private void removeRow() {
         List<Integer> rows = collectRows();
         rows.forEach(row -> {
@@ -330,6 +390,7 @@ public class GamePane {
 
     /**
      * Place pieces down.
+     *
      * @param rows list
      */
     private void replacePieces(List<Integer> rows) {
@@ -351,6 +412,7 @@ public class GamePane {
 
     /**
      * Bonus points.
+     *
      * @param rowsDispatch how many full rows are removed.
      * @return score
      */
@@ -359,7 +421,9 @@ public class GamePane {
         return rowsDispatch * 5 + bonus;
     }
 
-    /** Collect full rows. */
+    /**
+     * Collect full rows.
+     */
     private List<Integer> collectRows() {
         // List of rows to remove
         List<Integer> rows = new ArrayList<>();
@@ -379,7 +443,9 @@ public class GamePane {
         return rows;
     }
 
-    /** Draw next shape. */
+    /**
+     * Draw next shape.
+     */
     private void show() {
         Shape shape = originalShapes.get(new Random().nextInt(originalShapes.size())).copy();
         shape.move(GRID_WIDTH / 2 + 3, 0);
@@ -390,39 +456,42 @@ public class GamePane {
         shape.getPieces().forEach(this::placePiece);
     }
 
-    /** Game start. */
+    /**
+     * Game start.
+     */
     public Scene startGame() {
         OverPane over = new OverPane();
 
         createContent();
         Scene scene = new Scene(pane);
         movementController(scene);
-            KeyFrame keyFrame = new KeyFrame(Duration.seconds(0.5), ev -> {
-                if (!isValidState()) {
-                    timeline.stop();
-                    OverPane.dumpScoresToFile(score);
-                    gameOverAction(over);
-                }
+        KeyFrame keyFrame = new KeyFrame(Duration.seconds(0.5), ev -> {
+            if (!isValidState()) {
+                timeline.stop();
+                OverPane.dumpScoresToFile(score);
+                gameOverAction(over);
+            }
 
-                if (countSeconds != 0 && countSeconds % Duration.minutes(1).toSeconds() == 0
-                        && timeline.getStatus() != Animation.Status.PAUSED) {
-                    System.out.println("Incremented!");
-                    timeline.setRate(timeline.getRate() + dFps);
-                    scoreLabel.setText("SCORE: " + (score += 5));
-                }
-                countSeconds++;
-                update();
-                reDraw();
-            });
+            if (countSeconds != 0 && countSeconds % Duration.minutes(1).toSeconds() == 0
+                    && timeline.getStatus() != Animation.Status.PAUSED) {
+                System.out.println("Incremented!");
+                timeline.setRate(timeline.getRate() + dFps);
+                scoreLabel.setText("SCORE: " + (score += 5));
+            }
+            countSeconds++;
+            update();
+            reDraw();
+        });
 
-            timeline.getKeyFrames().add(keyFrame);
-            timeline.setCycleCount(Timeline.INDEFINITE);
-            timeline.play();
+        timeline.getKeyFrames().add(keyFrame);
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
         return scene;
     }
 
     /**
      * Set on key pressed etc.
+     *
      * @param scene scene
      */
     private void movementController(Scene scene) {
@@ -431,13 +500,17 @@ public class GamePane {
                 return;
             }
             switch (ev.getCode()) {
-                case UP: moveShape(p -> p.rotate(), p -> p.rotateBack(), false);
+                case UP:
+                    moveShape(p -> p.rotate(), p -> p.rotateBack(), false);
                     break;
-                case LEFT: moveShape(p -> p.move(Direction.LEFT), p -> p.move(Direction.RIGHT), false);
+                case LEFT:
+                    moveShape(p -> p.move(Direction.LEFT), p -> p.move(Direction.RIGHT), false);
                     break;
-                case RIGHT: moveShape(p -> p.move(Direction.RIGHT), p -> p.move(Direction.LEFT), false);
+                case RIGHT:
+                    moveShape(p -> p.move(Direction.RIGHT), p -> p.move(Direction.LEFT), false);
                     break;
-                case DOWN: moveShape(p -> p.move(Direction.DOWN), p -> p.move(Direction.UP), true);
+                case DOWN:
+                    moveShape(p -> p.move(Direction.DOWN), p -> p.move(Direction.UP), true);
                     break;
                 case P:
                     if (timeline.getStatus() == Animation.Status.RUNNING) {
@@ -462,6 +535,7 @@ public class GamePane {
 
     /**
      * Actions on game over screen.
+     *
      * @param over game over pane
      */
     private void gameOverAction(OverPane over) {
@@ -481,7 +555,9 @@ public class GamePane {
         }
     }
 
-    /** Action on pause. */
+    /**
+     * Action on pause.
+     */
     private void pauseAction() {
         Main m = new Main();
         Label label = new Label("Press P to continue!");
@@ -516,6 +592,12 @@ public class GamePane {
         pane.requestFocus();
     }
 
+    /**
+     * Actions for pause pane.
+     *
+     * @param pane  pause pane
+     * @param music music button
+     */
     private void mouseClickAction(GridPane pane, Button music) {
         music.setText(current == null || current.getMediaPlayer().getStatus() == MediaPlayer.Status.STOPPED ? "Music on" : "Music off");
         music.setOnMouseClicked(ev -> {
@@ -527,7 +609,7 @@ public class GamePane {
                 current.getMediaPlayer().play();
 
             }
-            if (current.getMediaPlayer().getStatus() == MediaPlayer.Status.PLAYING){
+            if (current.getMediaPlayer().getStatus() == MediaPlayer.Status.PLAYING) {
                 music.setText("Music on");
                 current.getMediaPlayer().stop();
             }
@@ -536,10 +618,12 @@ public class GamePane {
         changeMusicAction(pane);
     }
 
-    /** Change music. */
+    /**
+     * Change music.
+     */
     private void changeMusicAction(GridPane pane) {
         Button changeMusic = new Button("Change music");
-        pane.add(changeMusic, 1,3);
+        pane.add(changeMusic, 1, 3);
         setButtonStyle(changeMusic);
 
         changeMusic.setOnMouseClicked(ev -> {
@@ -554,20 +638,23 @@ public class GamePane {
     }
 
 
-
-    /** Get path to new track. */
+    /**
+     * Get path to new track.
+     */
     private String getPath(MediaView m) {
         String[] filePath = m.getMediaPlayer().getMedia().getSource().split("/");
         switch (filePath[filePath.length - 1]) {
-            case "Troika.mp3" :
+            case "Troika.mp3":
                 return "Loginska.mp3";
-            case "Loginska.mp3" :
+            case "Loginska.mp3":
                 return "Karinka.mp3";
         }
         return "Troika.mp3";
     }
 
-    /** Just style, yo.
+    /**
+     * Just style, yo.
+     *
      * @param buttons array
      */
     private void setButtonStyle(Button... buttons) {

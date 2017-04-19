@@ -12,24 +12,36 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 
-
-/** Main. */
+/**
+ * Main.
+ */
 public class Main extends Application {
 
-    /** Screen width. */
+    /**
+     * Screen width.
+     */
     private static final int width = 800;
-    /** Screen height. */
+    /**
+     * Screen height.
+     */
     private static final int height = 800;
-    /** Background image */
+    /**
+     * Background image
+     */
     private Image backgroundImage;
-    /** Names of tracks. Array. */
+    /**
+     * Names of tracks. Array.
+     */
     private String[] tracks = {"Troika.mp3", "Loginska.mp3", "Karinka.mp3"};
-    /** Current media player */
+    /**
+     * Current media player
+     */
     public static MediaView current = new MediaView();
 
     public static String mediaPath = "Games/src/Tetris/music/";
@@ -38,6 +50,7 @@ public class Main extends Application {
 
     /**
      * Main method.
+     *
      * @param primaryStage Stage.
      */
     @Override
@@ -52,7 +65,9 @@ public class Main extends Application {
 
     }
 
-    /** Define background images */
+    /**
+     * Define background images
+     */
     private void setImages() {
         backgroundImage = new Image(getClass().getResourceAsStream("Interface/love.jpg"),
                 width, height, false, true);
@@ -60,11 +75,12 @@ public class Main extends Application {
 
     /**
      * Define panes' action events (mostly transitions).
-     * @param startPane Start Pane
+     *
+     * @param startPane    Start Pane
      * @param settingsPane Settings Pane
-     * @param scoresPane Scores Pane
+     * @param scoresPane   Scores Pane
      */
-    private void panesOnAction(StartPane startPane, SettingsPane settingsPane, ScoresPane scoresPane){
+    private void panesOnAction(StartPane startPane, SettingsPane settingsPane, ScoresPane scoresPane) {
         Scene startScene = new Scene(startPane);
         Scene settingsScene = new Scene(settingsPane);
         Scene scoresScene = new Scene(scoresPane);
@@ -83,6 +99,7 @@ public class Main extends Application {
 
     /**
      * Define settingsPane action events.
+     *
      * @param settingsPane Settings Pane
      */
     private void settingsAction(SettingsPane settingsPane) {
@@ -91,7 +108,7 @@ public class Main extends Application {
             if (settingsPane.getMusicBox().isSelected()) {
                 current = new MediaView();
                 radioAction(settingsPane);
-            } else if (current.getMediaPlayer() != null){
+            } else if (current.getMediaPlayer() != null) {
                 current.getMediaPlayer().stop();
                 current = null;
             }
@@ -150,6 +167,7 @@ public class Main extends Application {
 
     /**
      * Choose color.
+     *
      * @param settingsPane Settings Pane
      */
     private void setColorChoose(SettingsPane settingsPane) {
@@ -174,6 +192,7 @@ public class Main extends Application {
 
     /**
      * Getter.
+     *
      * @return width
      */
     public static int getWidth() {
@@ -182,6 +201,7 @@ public class Main extends Application {
 
     /**
      * Getter.
+     *
      * @return height
      */
     public static int getHeight() {
@@ -190,6 +210,7 @@ public class Main extends Application {
 
     /**
      * Game logic.
+     *
      * @param stage primaryStage
      */
     private void game(Stage stage) {
@@ -199,6 +220,7 @@ public class Main extends Application {
 
     /**
      * Main.
+     *
      * @param args args from cmd
      */
     public static void main(String[] args) {

@@ -16,35 +16,62 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-/** Game Settings screen. */
+/**
+ * Game Settings screen.
+ */
 public class SettingsPane extends GridPane {
-    /** Typical button width. */
+    /**
+     * Typical button width.
+     */
     private final int buttonWidth = 130;
-    /** And height. */
+    /**
+     * And height.
+     */
     private final int buttonHeight = 40;
-    /** Define general music switch. */
+    /**
+     * Define general music switch.
+     */
     private CheckBox musicOnOff = new CheckBox("Music on/off");
-    /** Troika track switch. */
+    /**
+     * Troika track switch.
+     */
     private RadioButton troika = new RadioButton("Troika");
-    /** Loginska track switch. */
+    /**
+     * Loginska track switch.
+     */
     private RadioButton loginska = new RadioButton("Loginska");
-    /** Karinka track switch. */
+    /**
+     * Karinka track switch.
+     */
     private RadioButton karinka = new RadioButton("Karinka");
-    /** Back button. */
+    /**
+     * Back button.
+     */
     private Button back = new Button("Back");
-    /** Red color choose. */
+    /**
+     * Red color choose.
+     */
     private Button red = new Button("Red");
-    /** White color choose. */
+    /**
+     * White color choose.
+     */
     private Button white = new Button("White");
-    /** Purple color choose. */
+    /**
+     * Purple color choose.
+     */
     private Button purple = new Button("Purple");
-    /** Blue color choose. */
+    /**
+     * Blue color choose.
+     */
     private Button blue = new Button("Blue");
-    /** Label which appears after choosing color */
+    /**
+     * Label which appears after choosing color
+     */
     private Label colorLabel = new Label("Choose the color!");
 
     /**
      * Class constructor.
+     *
      * @param backgroundImage background image
      */
     public SettingsPane(Image backgroundImage) {
@@ -62,9 +89,10 @@ public class SettingsPane extends GridPane {
 
     /**
      * Set pane preferences.
-     * @param width pane width
+     *
+     * @param width  pane width
      * @param height pane height
-     * @param image background image
+     * @param image  background image
      */
     private void setPanePrefs(int width, int height, Image image) {
         setPrefSize(width, height);
@@ -77,7 +105,9 @@ public class SettingsPane extends GridPane {
 
     }
 
-    /** Define Hbox for color label, so it wont change the column width when appears. */
+    /**
+     * Define Hbox for color label, so it wont change the column width when appears.
+     */
     private void setHbox() {
         setButtons();
         HBox hbox = new HBox();
@@ -91,6 +121,7 @@ public class SettingsPane extends GridPane {
 
     /**
      * Set background.
+     *
      * @param image background image.
      */
     private void setBackground(Image image) {
@@ -98,7 +129,10 @@ public class SettingsPane extends GridPane {
                 BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
         setBackground(new Background(background));
     }
-    /** Set buttons. */
+
+    /**
+     * Set buttons.
+     */
     private void setButtons() {
         colorLabel.setAlignment(Pos.BOTTOM_RIGHT);
         back.setPrefSize(buttonWidth, buttonHeight);
@@ -135,7 +169,9 @@ public class SettingsPane extends GridPane {
         }
     }
 
-    /** Set radio buttons */
+    /**
+     * Set radio buttons
+     */
     private void setRadio() {
         ToggleGroup group = new ToggleGroup();
         int x = 155;
@@ -154,6 +190,7 @@ public class SettingsPane extends GridPane {
 
     /**
      * Resolve get back button.
+     *
      * @return back.
      */
     public Button getBack() {
@@ -162,6 +199,7 @@ public class SettingsPane extends GridPane {
 
     /**
      * Resolve red button.
+     *
      * @return red.
      */
     public Button getRed() {
@@ -170,6 +208,7 @@ public class SettingsPane extends GridPane {
 
     /**
      * Resolve white button.
+     *
      * @return white.
      */
     public Button getWhite() {
@@ -178,6 +217,7 @@ public class SettingsPane extends GridPane {
 
     /**
      * Resolve purple button.
+     *
      * @return purple.
      */
     public Button getPurple() {
@@ -186,6 +226,7 @@ public class SettingsPane extends GridPane {
 
     /**
      * Resolve blue button.
+     *
      * @return blue.
      */
     public Button getBlue() {
@@ -194,6 +235,7 @@ public class SettingsPane extends GridPane {
 
     /**
      * Resolve music checkbox.
+     *
      * @return checkbox.
      */
     public CheckBox getMusicBox() {
@@ -202,6 +244,7 @@ public class SettingsPane extends GridPane {
 
     /**
      * Resolve troika.
+     *
      * @return button
      */
     public RadioButton getTroika() {
@@ -210,6 +253,7 @@ public class SettingsPane extends GridPane {
 
     /**
      * Resolve loginska.
+     *
      * @return button
      */
     public RadioButton getLoginska() {
@@ -218,6 +262,7 @@ public class SettingsPane extends GridPane {
 
     /**
      * Resolve karinka.
+     *
      * @return button
      */
     public RadioButton getKarinka() {
@@ -226,6 +271,7 @@ public class SettingsPane extends GridPane {
 
     /**
      * Writes new color to the file.
+     *
      * @param envColor set color.
      */
     public void changeColor(String envColor) {
@@ -241,13 +287,16 @@ public class SettingsPane extends GridPane {
 
     /**
      * Changing label text.
+     *
      * @param chosen color.
      */
     public void chooseColorChange(String chosen) {
         colorLabel.setText("You chose " + chosen + "!");
     }
 
-    /** Resetting label text. */
+    /**
+     * Resetting label text.
+     */
     public void setDefault() {
         colorLabel.setText("Choose the color!");
     }

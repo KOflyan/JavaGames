@@ -16,12 +16,18 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-/** Game Scores screen. */
+/**
+ * Game Scores screen.
+ */
 public class ScoresPane extends Pane {
-    /** Define back button */
+    /**
+     * Define back button
+     */
     private Button back = new Button("Back");
 
-    /** Class constructor. */
+    /**
+     * Class constructor.
+     */
     public ScoresPane() {
         setPanePrefs(Main.getWidth(), Main.getHeight());
         back.setPrefSize(130, 40);
@@ -35,7 +41,8 @@ public class ScoresPane extends Pane {
 
     /**
      * Set pane preferences.
-     * @param width pane width
+     *
+     * @param width  pane width
      * @param height pane height
      */
     private void setPanePrefs(int width, int height) {
@@ -44,7 +51,9 @@ public class ScoresPane extends Pane {
         setPadding(new Insets(50));
     }
 
-    /** Get scores from the file. */
+    /**
+     * Get scores from the file.
+     */
     private List<Integer> getScores() {
         Set<Integer> scores = new HashSet<>();
         try {
@@ -60,7 +69,8 @@ public class ScoresPane extends Pane {
         return separateBest(scores);
     }
 
-    /** Separate the best 10 scores.
+    /**
+     * Separate the best 10 scores.
      *
      * @param scores Set
      * @return list
@@ -74,7 +84,9 @@ public class ScoresPane extends Pane {
         return scoresList;
     }
 
-    /** Add scores to the pane. */
+    /**
+     * Add scores to the pane.
+     */
     private void addScores() {
         List<Integer> bestScores = getScores();
         int index = 1;
@@ -119,7 +131,8 @@ public class ScoresPane extends Pane {
 
     /**
      * Set style.
-     * @param label label
+     *
+     * @param label    label
      * @param fontSize font size
      */
     private void setLabelStyle(Label label, int fontSize) {
@@ -129,6 +142,7 @@ public class ScoresPane extends Pane {
 
     /**
      * Resolve back button.
+     *
      * @return back.
      */
     public Button getBack() {

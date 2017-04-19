@@ -51,14 +51,18 @@ public class Shape {
         });
     }
 
-    /** Rotation: just set each piece's direction to its next. */
+    /**
+     * Rotation: just set each piece's direction to its next.
+     */
     public void rotate() {
         pieces.forEach(p -> p.setDirection(p.directions.stream()
                 .map(Direction::nextDirection)
                 .collect(Collectors.toList()).toArray(new Direction[0])));
     }
 
-    /** Borders. */
+    /**
+     * Borders.
+     */
     public void rotateBack() {
         pieces.forEach(p -> p.setDirection(p.directions.stream()
                 .map(Direction::previousDirection)
@@ -66,12 +70,16 @@ public class Shape {
                 .toArray(new Direction[0])));
     }
 
-    /** Removing concrete blocks in case of full row. */
+    /**
+     * Removing concrete blocks in case of full row.
+     */
     public void detach(int x, int y) {
         pieces.removeIf(p -> p.x == x && p.y == y);
     }
 
-    /** Return new object with the same parameters */
+    /**
+     * Return new object with the same parameters
+     */
     public Shape copy() {
         return new Shape(color, pieces.stream()
                 // Copy every piece linked to parent

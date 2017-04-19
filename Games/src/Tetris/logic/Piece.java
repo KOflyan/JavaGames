@@ -4,7 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Piece {
-    /** Distance from the piece to the center piece of the shape. */
+    /**
+     * Distance from the piece to the center piece of the shape.
+     */
     public int distance;
     public List<Direction> directions;
     public Shape shape;
@@ -17,6 +19,7 @@ public class Piece {
 
     /**
      * Set the particular piece as a part of something bigger.
+     *
      * @param parent Shape obj
      */
     public void setParent(Shape parent) {
@@ -30,7 +33,10 @@ public class Piece {
         }
 
     }
-    /** We need a collection here to deal with more complex structures as cube, for instance. */
+
+    /**
+     * We need a collection here to deal with more complex structures as cube, for instance.
+     */
     public void setDirection(Direction... direction) {
         this.directions = Arrays.asList(direction);
 
@@ -45,6 +51,7 @@ public class Piece {
 
     /**
      * New object with same properties.
+     *
      * @return new Piece
      */
     public Piece copy() {

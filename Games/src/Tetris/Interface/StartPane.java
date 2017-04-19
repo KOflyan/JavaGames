@@ -19,21 +19,23 @@ public class StartPane extends GridPane {
 
     /**
      * Class constructor.
+     *
      * @param backgroundImage background image
      */
     public StartPane(Image backgroundImage) {
         setPanePrefs(Main.getWidth(), Main.getHeight(), backgroundImage);
         add(start, 1, 3);
         add(scores, 1, 4);
-        add(settings,1,5);
+        add(settings, 1, 5);
         add(exit, 1, 6);
     }
 
     /**
      * Set pane preferences.
-     * @param width pane width
+     *
+     * @param width  pane width
      * @param height pane height
-     * @param image background image
+     * @param image  background image
      */
     private void setPanePrefs(int width, int height, Image image) {
         setPrefSize(width, height);
@@ -45,6 +47,7 @@ public class StartPane extends GridPane {
 
     /**
      * Set background.
+     *
      * @param image background image.
      */
     private void setBackground(Image image) {
@@ -54,7 +57,9 @@ public class StartPane extends GridPane {
         setButtons();
     }
 
-    /** Set buttons. */
+    /**
+     * Set buttons.
+     */
     private void setButtons() {
         start.setPrefSize(130, 40);
         scores.setPrefSize(130, 40);
@@ -72,6 +77,7 @@ public class StartPane extends GridPane {
 
     /**
      * Resolve exit button.
+     *
      * @return exit.
      */
     public Button getExit() {
@@ -80,6 +86,7 @@ public class StartPane extends GridPane {
 
     /**
      * Resolve start button.
+     *
      * @return start.
      */
     public Button getStart() {
@@ -88,6 +95,7 @@ public class StartPane extends GridPane {
 
     /**
      * Resolve score screen button.
+     *
      * @return scores.
      */
     public Button getScores() {
@@ -96,6 +104,7 @@ public class StartPane extends GridPane {
 
     /**
      * Resolve settings screen button.
+     *
      * @return settings.
      */
     public Button getSettings() {

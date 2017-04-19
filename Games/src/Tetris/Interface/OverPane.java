@@ -17,14 +17,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-/** Game Over screen. */
+/**
+ * Game Over screen.
+ */
 public class OverPane extends StackPane {
-    /** Define start again button. */
+    /**
+     * Define start again button.
+     */
     private Button startOver = new Button("Go to Menu");
-    /** Define exit button. */
+    /**
+     * Define exit button.
+     */
     private Button exit = new Button("Exit");
 
-    /** Class constructor. */
+    /**
+     * Class constructor.
+     */
     public OverPane() {
         setPanePrefs(Main.getWidth(), Main.getHeight());
         getChildren().addAll(startOver, exit);
@@ -32,7 +40,8 @@ public class OverPane extends StackPane {
 
     /**
      * Set pane preferences.
-     * @param width pane width
+     *
+     * @param width  pane width
      * @param height pane height
      */
     private void setPanePrefs(int width, int height) {
@@ -44,7 +53,9 @@ public class OverPane extends StackPane {
         setLabels();
     }
 
-    /** Set pane labels. */
+    /**
+     * Set pane labels.
+     */
     private void setLabels() {
         Label label = new Label("Game Over!");
         Label label2 = new Label("Would you like to try again?");
@@ -59,6 +70,7 @@ public class OverPane extends StackPane {
 
     /**
      * Set background.
+     *
      * @param image background image.
      */
     private void setBackground(Image image) {
@@ -68,7 +80,9 @@ public class OverPane extends StackPane {
         setButtons();
     }
 
-    /** Set buttons. */
+    /**
+     * Set buttons.
+     */
     private void setButtons() {
         startOver.setPrefSize(130, 30);
         exit.setPrefSize(130, 30);
@@ -79,6 +93,9 @@ public class OverPane extends StackPane {
         setButtonStyle(exit, startOver);
     }
 
+    /**
+     * Set style.
+     */
     private void setButtonStyle(Button... buttons) {
         for (Button b : buttons) {
             b.setStyle("-fx-border-color: white; -fx-base: black;");
@@ -88,6 +105,7 @@ public class OverPane extends StackPane {
 
     /**
      * Resolve startOver button.
+     *
      * @return startOver.
      */
     public Button getStartOver() {
@@ -96,13 +114,15 @@ public class OverPane extends StackPane {
 
     /**
      * Resolve exit button.
+     *
      * @return exit.
      */
     public Button getExit() {
         return exit;
     }
 
-    /** Append to file.
+    /**
+     * Append to file.
      *
      * @param score score
      */
