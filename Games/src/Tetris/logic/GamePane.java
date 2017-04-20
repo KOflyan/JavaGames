@@ -88,7 +88,7 @@ public class GamePane {
     /**
      * Original pieces
      */
-    private List<Shape> originalShapes = new ArrayList<>();
+    public List<Shape> originalShapes = new ArrayList<>();
     /**
      * Copied originals
      */
@@ -112,7 +112,7 @@ public class GamePane {
     private void createContent() {
         pane = new Pane();
         pane.setPrefSize(width, height);
-
+        // Texture
         Canvas canvas = new Canvas(GRID_WIDTH * BLOCK_SIZE, GRID_HEIGHT * BLOCK_SIZE);
         g = canvas.getGraphicsContext2D();
         pane.getChildren().add(canvas);
@@ -277,14 +277,14 @@ public class GamePane {
     /**
      * Fall update.
      */
-    private void update() {
+    public void update() {
         moveShape(p -> p.move(Direction.DOWN), p -> p.move(Direction.UP), true);
     }
 
     /**
      * Update when moves by key.
      */
-    private void reDraw() {
+    public void reDraw() {
         g.clearRect(0, 0, GRID_WIDTH * BLOCK_SIZE, GRID_HEIGHT * BLOCK_SIZE);
 
         shapes.forEach(p -> p.draw(g));
@@ -295,7 +295,7 @@ public class GamePane {
      *
      * @param piece piece
      */
-    private void placePiece(Piece piece) {
+    public void placePiece(Piece piece) {
         grid[piece.x][piece.y]++;
     }
 
@@ -304,7 +304,7 @@ public class GamePane {
      *
      * @param piece piece
      */
-    private void removePiece(Piece piece) {
+    public void removePiece(Piece piece) {
         grid[piece.x][piece.y]--;
     }
 
@@ -314,7 +314,7 @@ public class GamePane {
      * @param piece piece
      * @return bool
      */
-    private boolean inBounds(Piece piece) {
+    public boolean inBounds(Piece piece) {
         return piece.x < 5 || piece.x >= GRID_WIDTH
                 || piece.y < 0 || piece.y >= GRID_HEIGHT;
     }
@@ -335,6 +335,7 @@ public class GamePane {
         if (!beyondScreen) {
             currentShape.getPieces().forEach(this::placePiece);
         } else {
+            // Rotating back
             isNotOk.accept(currentShape);
             currentShape.getPieces().forEach(this::placePiece);
 
@@ -424,7 +425,7 @@ public class GamePane {
     /**
      * Collect full rows.
      */
-    private List<Integer> collectRows() {
+    public List<Integer> collectRows() {
         // List of rows to remove
         List<Integer> rows = new ArrayList<>();
 

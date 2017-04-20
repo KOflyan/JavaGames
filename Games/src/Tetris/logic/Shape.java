@@ -42,7 +42,6 @@ public class Shape {
     }
 
     public void draw(GraphicsContext g) {
-
         g.setFill(color);
         g.setStroke(Color.BLACK);
         pieces.forEach(p -> {

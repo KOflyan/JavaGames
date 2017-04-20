@@ -31,7 +31,6 @@ public class Piece {
             x += distance * d.getX(); // multiplying so the pieces stay in places and won't collide
             y += distance * d.getY();
         }
-
     }
 
     /**

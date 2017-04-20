@@ -26,7 +26,7 @@ public enum Direction {
      * @return previous direction obj
      */
     public Direction previousDirection() {
-        // ordinal() means current Pole coordinate
+        // ordinal means current Pole coordinate
         int nextIndex = ordinal() - 1;
 
         if (nextIndex == -1) {
