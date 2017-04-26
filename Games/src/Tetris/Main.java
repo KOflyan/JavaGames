@@ -44,9 +44,13 @@ public class Main extends Application {
      * Current media player
      */
     public static MediaView current = new MediaView();
-
+    /**
+     * Path.
+     */
     public static String mediaPath = "Games/src/Tetris/music/";
-
+    /**
+     * Current stage.
+     */
     public static Stage stage = new Stage();
 
     /**
@@ -57,13 +61,10 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         Main.stage = primaryStage;
-        //stage.setWidth(width);
-        //stage.setHeight(height);
         setImages();
         panesOnAction(new StartPane(backgroundImage), new SettingsPane(backgroundImage), new ScoresPane());
         //stage.setResizable(false);
         stage.show();
-
     }
 
     /**
@@ -164,7 +165,6 @@ public class Main extends Application {
         current.getMediaPlayer().setCycleCount(MediaPlayer.INDEFINITE);
         current.getMediaPlayer().play();
     }
-
 
     /**
      * Choose color.
